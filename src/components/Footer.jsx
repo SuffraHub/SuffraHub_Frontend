@@ -24,6 +24,7 @@ const Footer = ({ toastMessages = [] }) => {
             href="/"
             className="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
             aria-label="Bootstrap"
+            
           >
             <i className="bi bi-check2-square" style={{ fontSize: '2rem', color: 'blue' }}></i>
           </a>

@@ -11,6 +11,7 @@ function Admin() {
  useEffect(() => {
     document.title = 'Home | SuffraHub';
   })
+  
 
  const mockToasts = [
     "Głosowanie zostało zapisane",

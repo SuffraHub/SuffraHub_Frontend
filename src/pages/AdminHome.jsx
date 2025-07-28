@@ -13,6 +13,7 @@ function Admin() {
      document.title = 'Admin | SuffraHub';
    })
 
+   
  const mockToasts = [
     "Głosowanie zostało zapisane",
     "Zmieniono status ankiety"
