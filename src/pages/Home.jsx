@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-// komponenty
+// komponenty 
 import Header from '../components/admin/Header.jsx';
 import Sidebar from '../components/admin/Sidebar.jsx';
 import Footer from '../components/Footer.jsx';
