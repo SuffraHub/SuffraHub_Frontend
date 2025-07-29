@@ -12,6 +12,9 @@ import Login from './pages/Login.jsx';
 // Strony admina
 import AdminHome from './pages/AdminHome.jsx';
 import Register from './pages/Register.jsx';
+import AdminPolls from './pages/AdminPolls.jsx';
+import AdminQuestion from './pages/AdminQuestions.jsx';
+import AdminAccount from './pages/AdminAccount.jsx';
 
 const App = () => {
   return (
@@ -28,6 +31,9 @@ const App = () => {
         {/* Admin layout */}
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<AdminHome />} />
+          <Route path="polls" element={<AdminPolls />} />
+          <Route path="questions" element={<AdminQuestion/>}/>
+          <Route path="account" element={<AdminAccount/>}/>
         </Route>
 
       </Routes>

@@ -1,11 +1,9 @@
-// LAYOUT dla stron administracyjnych
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Header from '../components/admin/Header.jsx';
 import Sidebar from '../components/admin/Sidebar.jsx';
 import Footer from '../components/Footer.jsx';
 
-
-const Layout = () => {
+const LayoutAdmin = () => {
   return (
     <>
         <Header />
@@ -19,7 +17,7 @@ const Layout = () => {
         </div>
         <Footer />
     </>
-  )
+  );
 };
 
-export default Layout;
+export default LayoutAdmin;
