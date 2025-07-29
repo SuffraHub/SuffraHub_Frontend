@@ -2,7 +2,7 @@
 
 function AdminQuestion() {
   return (
-    <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 className="h3 d-flex">
           <ol className="breadcrumb align-self-end">
@@ -18,7 +18,7 @@ function AdminQuestion() {
             <li className="breadcrumb-item active" aria-current="page">Baza pytań</li>
           </ol>
         </h1>
-        <div className="btn-toolbar mb-2 mb-md-0">
+        {/* <div className="btn-toolbar mb-2 mb-md-0">
           <div className="btn-group me-2">
             <button type="button" className="btn btn-sm btn-outline-secondary">Share</button>
             <button type="button" className="btn btn-sm btn-outline-secondary">Export</button>
@@ -27,7 +27,7 @@ function AdminQuestion() {
             <svg className="bi" aria-hidden="true"><use xlinkHref="#calendar3"></use></svg>
             This week
           </button>
-        </div>
+        </div> */}
       </div>
 
       <div className="card shadow-sm p-4 my-4">
@@ -69,7 +69,7 @@ function AdminQuestion() {
           </table>
         </div>
       </div>
-    </main>
+    </>
   );
 }
 
