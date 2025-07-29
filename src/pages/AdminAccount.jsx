@@ -2,12 +2,8 @@
 
 function AdminAccount() {
 
-
     return (
-
-
-
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 className="h3 d-flex">
                     <ol className="breadcrumb align-self-end">
@@ -18,7 +14,7 @@ function AdminAccount() {
                         <li className="breadcrumb-item active" aria-current="page">Konto</li>
                     </ol>
                 </h1>
-                <div className="btn-toolbar mb-2 mb-md-0">
+                {/* <div className="btn-toolbar mb-2 mb-md-0">
                     <div className="btn-group me-2 "> <button type="button" className="btn btn-sm btn-outline-secondary">Share</button> <button type="button" className="btn btn-sm btn-outline-secondary">Export</button> </div>
                     <button type="button" className="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
                         <svg className="bi" aria-hidden="true">
@@ -26,7 +22,7 @@ function AdminAccount() {
                         </svg>
                         This week
                     </button>
-                </div>
+                </div> */}
             </div>
             <div className="card shadow-sm p-4 my-4">
                 <h4 className="card-title mb-3">Twoje konto</h4>
@@ -34,15 +30,15 @@ function AdminAccount() {
                 <form className="mb-4" action="" method="post">
                     <div className="card-body">
                         <div className="form-floating mb-1">
-                            <input type="text" className="form-control" id="imie" name="imie" placeholder="Imię" value="Username" />
+                            <input type="text" className="form-control" id="imie" name="imie" placeholder="Imię" value="" />
                             <label for="imie">Imię</label>
                         </div>
                         <div className="form-floating mb-4">
-                            <input type="text" className="form-control" id="nazwisko" name="nazwisko" placeholder="Nazwisko" value="Nazwisko" />
+                            <input type="text" className="form-control" id="nazwisko" name="nazwisko" placeholder="Nazwisko" value="" />
                             <label for="nazwisko">Nazwisko</label>
                         </div>
                         <div className="form-floating mb-4">
-                            <input type="email" className="form-control" id="email" name="email" placeholder="email" value="Email" />
+                            <input type="email" className="form-control" id="email" name="email" placeholder="email" value="" />
                             <label for="email">E-mail</label>
                         </div>
                         <div className="form-floating mb-1">
@@ -59,7 +55,7 @@ function AdminAccount() {
 
             </div>
 
-        </main>
+        </>
 
     )
 
