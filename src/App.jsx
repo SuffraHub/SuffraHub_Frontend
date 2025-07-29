@@ -15,6 +15,7 @@ import Register from './pages/Register.jsx';
 import AdminPolls from './pages/AdminPolls.jsx';
 import AdminQuestion from './pages/AdminQuestions.jsx';
 import AdminAccount from './pages/AdminAccount.jsx';
+import AdminTenant from './pages/AdminTenant.jsx';
 
 const App = () => {
   return (
@@ -31,9 +32,10 @@ const App = () => {
         {/* Admin layout */}
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<AdminHome />} />
-          <Route path="polls" element={<AdminPolls />} />
-          <Route path="questions" element={<AdminQuestion/>}/>
-          <Route path="account" element={<AdminAccount/>}/>
+          <Route path="/admin/polls" element={<AdminPolls />} />
+          <Route path="/admin/questions" element={<AdminQuestion/>}/>
+          <Route path="/admin/account" element={<AdminAccount/>}/>
+          <Route path="/admin/tenant" element={<AdminTenant />}/>
         </Route>
 
       </Routes>

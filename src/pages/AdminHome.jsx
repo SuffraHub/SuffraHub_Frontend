@@ -7,12 +7,6 @@ function Admin() {
      document.title = 'Admin | SuffraHub';
    })
 
-   
- const mockToasts = [
-    "Głosowanie zostało zapisane",
-    "Zmieniono status ankiety"
-  ]; // to jest placeholder zeby sie toast wyswietlal
-
   return (
     <>
     <h1>To jest AdminHome!</h1>
