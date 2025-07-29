@@ -6,11 +6,12 @@ import LayoutAdmin from './layouts/LayoutAdmin.jsx';
 
 // Strony publiczne
 import Home from './pages/Home.jsx';
-import LoginPage from './pages/Login.jsx';
+import Login from './pages/Login.jsx';
 // import RegisterPage from './pages/Register.jsx'; // jeśli chcesz dodać rejestrację
 
 // Strony admina
 import AdminHome from './pages/AdminHome.jsx';
+import Register from './pages/Register.jsx';
 
 const App = () => {
   return (
@@ -19,7 +20,8 @@ const App = () => {
         {/* Publiczne layouty */}
         <Route element={<LayoutDefault />}>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register/>}/>
           {/* <Route path="/register" element={<RegisterPage />} /> */}
         </Route>
 
@@ -27,6 +29,7 @@ const App = () => {
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<AdminHome />} />
         </Route>
+
       </Routes>
     </HashRouter>
   );

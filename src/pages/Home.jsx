@@ -129,7 +129,6 @@ function Home() {
       </main>
 
       <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-      <Footer toastMessages={["Witaj na stronie głównej!"]} />
     </>
   );
 }
