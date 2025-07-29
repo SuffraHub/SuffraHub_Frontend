@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Dodany import
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   const [activePolls] = useState([
@@ -14,6 +14,11 @@ const Sidebar = () => {
   const [inactivePolls] = useState([
     { id: 4, name: 'Nieaktywne głosowanie 1' },
   ]);
+
+  // Stany widoczności sekcji
+  const [isActiveOpen, setIsActiveOpen] = useState(true);
+  const [isClosedOpen, setIsClosedOpen] = useState(false);
+  const [isInactiveOpen, setIsInactiveOpen] = useState(false);
 
   const renderPollList = (polls) => (
     <ul className="ms-2">
@@ -88,35 +93,62 @@ const Sidebar = () => {
           <ul className="nav flex-column mb-auto">
             {/* Aktywne */}
             <li className="nav-item">
-              <a className="nav-link d-flex align-items-center gap-2" data-bs-toggle="collapse" href="#collapseActive" role="button">
+              <button
+                className="nav-link d-flex align-items-center gap-2 btn btn-link"
+                onClick={() => setIsActiveOpen(!isActiveOpen)}
+                aria-expanded={isActiveOpen}
+                aria-controls="collapseActive"
+                style={{ textDecoration: 'none' }}
+              >
                 <i className="bi bi-file-earmark-text text-black"></i>
-                Otwarte <i className="bi bi-chevron-down text-black"></i>
-              </a>
-              <div className="collapse show" id="collapseActive">
-                {renderPollList(activePolls)}
-              </div>
+                Otwarte
+                <i className={`bi ms-auto text-black ${isActiveOpen ? 'bi-chevron-up' : 'bi-chevron-down'}`}></i>
+              </button>
+              {isActiveOpen && (
+                <div id="collapseActive">
+                  {renderPollList(activePolls)}
+                </div>
+              )}
             </li>
 
             {/* Zamknięte */}
             <li className="nav-item">
-              <a className="nav-link d-flex align-items-center gap-2" data-bs-toggle="collapse" href="#collapseClosed" role="button">
+              <button
+                className="nav-link d-flex align-items-center gap-2 btn btn-link"
+                onClick={() => setIsClosedOpen(!isClosedOpen)}
+                aria-expanded={isClosedOpen}
+                aria-controls="collapseClosed"
+                style={{ textDecoration: 'none' }}
+              >
                 <i className="bi bi-file-earmark-text text-black"></i>
-                Zamknięte <i className="bi bi-chevron-down text-black"></i>
-              </a>
-              <div className="collapse" id="collapseClosed">
-                {renderPollList(closedPolls)}
-              </div>
+                Zamknięte
+                <i className={`bi ms-auto text-black ${isClosedOpen ? 'bi-chevron-up' : 'bi-chevron-down'}`}></i>
+              </button>
+              {isClosedOpen && (
+                <div id="collapseClosed">
+                  {renderPollList(closedPolls)}
+                </div>
+              )}
             </li>
 
             {/* Nieaktywne */}
             <li className="nav-item">
-              <a className="nav-link d-flex align-items-center gap-2" data-bs-toggle="collapse" href="#collapseInactive" role="button">
+              <button
+                className="nav-link d-flex align-items-center gap-2 btn btn-link"
+                onClick={() => setIsInactiveOpen(!isInactiveOpen)}
+                aria-expanded={isInactiveOpen}
+                aria-controls="collapseInactive"
+                style={{ textDecoration: 'none' }}
+              >
                 <i className="bi bi-file-earmark-text text-black"></i>
-                Nieaktywne <i className="bi bi-chevron-down text-black"></i>
-              </a>
-              <div className="collapse" id="collapseInactive">
-                {renderPollList(inactivePolls)}
-              </div>
+                Nieaktywne
+                <i className={`bi ms-auto text-black ${isInactiveOpen ? 'bi-chevron-up' : 'bi-chevron-down'}`}></i>
+              </button>
+              {isInactiveOpen && (
+                <div id="collapseInactive">
+                  {renderPollList(inactivePolls)}
+                </div>
+              )}
             </li>
           </ul>
 
@@ -138,7 +170,6 @@ const Sidebar = () => {
         </div>
       </div>
     </div>
-    
   );
 };
 
