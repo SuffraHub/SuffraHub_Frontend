@@ -5,7 +5,7 @@ const AdminHeader = () => {
   const companyName = "Firma XYZ";        // Placeholder
 
   return (
-    <header className="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
+    <header className="navbar sticky-top bg-dark flex-md-nowrap p-1 shadow" data-bs-theme="dark">
       <a className="navbar-brand col-md-5 col-lg-2 me-0 px-3 fs-6 text-white text-wrap" href="/admin.php">
         Dzierżawa:<br /> <b>{companyName}</b>
       </a>

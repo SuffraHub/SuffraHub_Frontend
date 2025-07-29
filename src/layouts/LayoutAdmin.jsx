@@ -6,17 +6,16 @@ import Footer from '../components/Footer.jsx';
 const LayoutAdmin = () => {
   return (
     <>
-      <Header />
-
-      <div className="container-fluid">
-        <div className="row">
+        <Header />
+        <div className="container-fluid">
+          <div className="row">
             <Sidebar />
-
-            <Outlet />
+            <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+              <Outlet />
+            </main>
+          </div>
         </div>
-      </div>
-
-      <Footer />
+        <Footer />
     </>
   );
 };

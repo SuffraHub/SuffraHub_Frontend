@@ -1,12 +1,6 @@
 import { useEffect } from 'react';
 
 
-// komponenty
-import Header from '../components/admin/Header.jsx';
-import Sidebar from '../components/admin/Sidebar.jsx';
-import Footer from '../components/Footer.jsx';
-
-
 function Admin() {
  // const [count, setCount] = useState(0)
   useEffect(() => {
@@ -21,8 +15,9 @@ function Admin() {
 
   return (
     <>
-    <Header />
-    <Sidebar />
+    <h1>To jest AdminHome!</h1>
+    					<h1 class="text-warning fw-bold">Tu będą rzeczy. Patrz panel boczny.</h1>
+
       {/* <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -43,7 +38,6 @@ function Admin() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p> */}
-      <Footer toastMessages={mockToasts} />
     </>
   )
 }

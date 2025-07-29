@@ -48,31 +48,31 @@ const Sidebar = () => {
           <ul className="nav flex-column">
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2 active" to="/">
-                <i className="bi bi-house-fill"></i>
+                <i className="bi bi-house-fill text-black"></i>
                 Strona główna
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/admin">
-                <i className="bi bi-house-gear-fill"></i>
+                <i className="bi bi-house-gear-fill text-black"></i>
                 Panel administracyjny
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/questions">
-                <i className="bi bi-database"></i>
+                <i className="bi bi-database text-black"></i>
                 Baza pytań
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/tenant">
-                <i className="bi bi-people"></i>
+                <i className="bi bi-people text-black"></i>
                 Dzierżawa
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/reports">
-                <i className="bi bi-graph-up"></i>
+                <i className="bi bi-graph-up text-black"></i>
                 Raporty
               </Link>
             </li>
@@ -81,7 +81,7 @@ const Sidebar = () => {
           <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
             <span>Moje głosowania</span>
             <Link className="link-secondary" to="/polls/new" aria-label="Dodaj nowe głosowanie">
-              <i className="bi bi-plus-circle"></i>
+              <i className="bi bi-plus-circle text-black"></i>
             </Link>
           </h6>
 
@@ -89,8 +89,8 @@ const Sidebar = () => {
             {/* Aktywne */}
             <li className="nav-item">
               <a className="nav-link d-flex align-items-center gap-2" data-bs-toggle="collapse" href="#collapseActive" role="button">
-                <i className="bi bi-file-earmark-text"></i>
-                Otwarte <i className="bi bi-chevron-down"></i>
+                <i className="bi bi-file-earmark-text text-black"></i>
+                Otwarte <i className="bi bi-chevron-down text-black"></i>
               </a>
               <div className="collapse show" id="collapseActive">
                 {renderPollList(activePolls)}
@@ -100,8 +100,8 @@ const Sidebar = () => {
             {/* Zamknięte */}
             <li className="nav-item">
               <a className="nav-link d-flex align-items-center gap-2" data-bs-toggle="collapse" href="#collapseClosed" role="button">
-                <i className="bi bi-file-earmark-text"></i>
-                Zamknięte <i className="bi bi-chevron-down"></i>
+                <i className="bi bi-file-earmark-text text-black"></i>
+                Zamknięte <i className="bi bi-chevron-down text-black"></i>
               </a>
               <div className="collapse" id="collapseClosed">
                 {renderPollList(closedPolls)}
@@ -111,8 +111,8 @@ const Sidebar = () => {
             {/* Nieaktywne */}
             <li className="nav-item">
               <a className="nav-link d-flex align-items-center gap-2" data-bs-toggle="collapse" href="#collapseInactive" role="button">
-                <i className="bi bi-file-earmark-text"></i>
-                Nieaktywne <i className="bi bi-chevron-down"></i>
+                <i className="bi bi-file-earmark-text text-black"></i>
+                Nieaktywne <i className="bi bi-chevron-down text-black"></i>
               </a>
               <div className="collapse" id="collapseInactive">
                 {renderPollList(inactivePolls)}
@@ -124,13 +124,13 @@ const Sidebar = () => {
           <ul className="nav flex-column mb-auto">
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/account">
-                <i className="bi bi-gear-wide-connected"></i>
+                <i className="bi bi-gear-wide-connected text-black"></i>
                 Ustawienia
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/logout">
-                <i className="bi bi-door-closed"></i>
+                <i className="bi bi-door-closed text-black"></i>
                 Wyloguj
               </Link>
             </li>
