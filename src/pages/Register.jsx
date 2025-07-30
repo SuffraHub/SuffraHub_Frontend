@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Register() {
 
@@ -122,9 +123,9 @@ function Register() {
 
             {message && <div className="fw-bold mt-4 text-danger">{message}</div>}
 
-            {/* <span className="pt-2 d-block">
+            <span className="pt-2 d-block">
                 Already have an account? <Link to="/login">Log in!</Link>
-            </span> */}
+            </span>
         </main>
     )
 }
