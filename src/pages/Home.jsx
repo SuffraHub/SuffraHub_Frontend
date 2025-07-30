@@ -38,7 +38,7 @@ function Home() {
     e.preventDefault();
 
     if (!voteToken || voteToken.length !== 6) {
-      setStatusMessage('❌ Wprowadź poprawny 6-cyfrowy kod.');
+      setStatusMessage('❌ Enter a valid 6-digits code');
       return;
     }
 
@@ -55,12 +55,12 @@ function Home() {
 
     const data = await res.json();
     if (data.success) {
-      setStatusMessage('✅ Token został przyjęty. Przekierowuję...');
+      setStatusMessage('✅ Token accepted. Redirecting...');
       setTimeout(() => {
         window.location.href = '/vote.php'; // lub zmień na React route
       }, 1000);
     } else {
-      setStatusMessage(`❌ ${data.message || 'Nieprawidłowy token lub weryfikacja nieudana.'}`);
+      setStatusMessage(`❌ ${data.message || 'Invalid token or verification failed.'}`);
     }
   };
 
@@ -74,7 +74,7 @@ function Home() {
           </svg>
           <h1 className="text-body-emphasis"><b>Suffra</b>Hub</h1>
           <p className="col-lg-8 mx-auto fs-5 text-muted">
-            System anonimowego głosowania z użyciem kodów. Nie wymaga logowania, wykonuje różnego rodzaju zestawienia.
+            System allowing anonymous voting using codes. No logging in, stats provided.
           </p>
 
           <form onSubmit={handleSubmit} className="mb-3">
@@ -90,7 +90,7 @@ function Home() {
                   value={voteToken}
                   onChange={(e) => setVoteToken(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 />
-                <label htmlFor="vote_token">Kod głosowania</label>
+                <label htmlFor="vote_token">Poll code</label>
               </div>
               <button className="btn btn-outline-primary" type="submit">Głosuj</button>
             </div>
@@ -107,7 +107,7 @@ function Home() {
         </div>
 
         <div className="p-5 mt-5 bg-body-tertiary rounded-3">
-          <h1 className="text-body-emphasis"><b>Głosowania</b><br />publiczne</h1>
+          <h1 className="text-body-emphasis"><b>Public</b><br />polls</h1>
           <div className="list-group mt-4 text-start">
             {publicVotes.map((vote) => (
               <a key={vote.id} href="#" className="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">

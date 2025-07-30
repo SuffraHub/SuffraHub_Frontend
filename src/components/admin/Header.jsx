@@ -2,19 +2,19 @@ import React from 'react';
 
 const AdminHeader = () => {
   const roleDescription = "Administrator"; // Placeholder
-  const companyName = "Firma XYZ";        // Placeholder
+  const companyName = "Firm XYZ";        // Placeholder
 
   return (
     <header className="navbar sticky-top bg-dark flex-md-nowrap p-1 shadow" data-bs-theme="dark">
       <a className="navbar-brand col-md-5 col-lg-2 me-0 px-3 fs-6 text-white text-wrap" href="/admin.php">
-        Dzierżawa:<br /> <b>{companyName}</b>
+        Tenant:<br /> <b>{companyName}</b>
       </a>
       <a className="btn btn-outline-light text-wrap ms-2 me-4 mb-2 mt-2" href="/admin_account.php">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
           className="bi bi-person-fill" viewBox="0 0 16 16">
           <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
         </svg>
-        &nbsp;Rola: <b>{roleDescription}</b>
+        &nbsp;Role: <b>{roleDescription}</b>
       </a>
       <ul className="navbar-nav flex-row d-md-none">
         <li className="nav-item text-nowrap">

@@ -4,8 +4,8 @@ export default function AdminTenant() {
   // Placeholdery na dane - zastąp potem fetchami do API
   const [companyInfo, setCompanyInfo] = useState({
     id: "123", // lub null jeśli brak dzierżawy
-    name: "Przykładowa dzierżawa",
-    description: "Opis przykładowej dzierżawy",
+    name: "Tenant name example",
+    description: "Tenant description example",
   });
 
   const [tenantUsers, setTenantUsers] = useState([
@@ -23,7 +23,7 @@ export default function AdminTenant() {
       imie: "Anna",
       nazwisko: "Nowak",
       email: "anna.nowak@example.com",
-      description: "Użytkownik",
+      description: "User",
       last_login: "2025-07-27 08:00",
       registration_date: "2024-06-03",
     },
@@ -39,12 +39,12 @@ export default function AdminTenant() {
 
   const handleUpdateSubmit = (e) => {
     e.preventDefault();
-    alert("Tu będzie wywołanie API do aktualizacji dzierżawy");
+    alert("API for tenant update will be here");
   };
 
   const handleCreateSubmit = (e) => {
     e.preventDefault();
-    alert("Tu będzie wywołanie API do utworzenia nowej dzierżawy");
+    alert("API for creating a new tenant will be here");
   };
 
   return (
@@ -54,7 +54,7 @@ export default function AdminTenant() {
             <div className="card shadow-sm p-4 my-4">
               {companyInfo.id ? (
                 <>
-                  <h4 className="card-title mb-3">Twoja dzierżawa</h4>
+                  <h4 className="card-title mb-3">Your tenant</h4>
                   <h5 className="fst-italic fw-bold">{companyInfo.name}</h5>
                   <form className="mb-4" onSubmit={handleUpdateSubmit}>
                     <div className="card-body">
@@ -64,30 +64,30 @@ export default function AdminTenant() {
                           className="form-control"
                           id="tenant_name"
                           name="tenant_name"
-                          placeholder="Nazwa dzierżawy"
+                          placeholder="Tenant name"
                           value={tenantName}
                           onChange={(e) => setTenantName(e.target.value)}
                         />
-                        <label htmlFor="tenant_name">Nazwa dzierżawy</label>
+                        <label htmlFor="tenant_name">Tenant name</label>
                       </div>
                       <div className="form-floating mb-3">
                         <textarea
                           className="form-control"
-                          placeholder="Opis dzierżawy"
+                          placeholder="Tenant description"
                           id="tenant_description"
                           name="tenant_description"
                           value={tenantDescription}
                           onChange={(e) => setTenantDescription(e.target.value)}
                         />
-                        <label htmlFor="tenant_description">Opis dzierżawy</label>
+                        <label htmlFor="tenant_description">Tenant description</label>
                       </div>
                     </div>
                     <button type="submit" className="btn btn-primary">
-                      Zatwierdź zmiany
+                      Submit changes
                     </button>
                   </form>
 
-                  <h5>Członkowie dzierżawy</h5>
+                  <h5>Tenant members</h5>
                   <div className="card-body">
                     <div
                       className="overflow-x-auto"
@@ -97,11 +97,11 @@ export default function AdminTenant() {
                         <thead>
                           <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Imię i Nazwisko</th>
+                            <th scope="col">Fullname</th>
                             <th scope="col">E-mail</th>
-                            <th scope="col">Uprawnienia</th>
-                            <th scope="col">Ostatnie logowanie</th>
-                            <th scope="col">Data rejestracji</th>
+                            <th scope="col">Permissions</th>
+                            <th scope="col">Last seen</th>
+                            <th scope="col">Registration date</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -125,7 +125,7 @@ export default function AdminTenant() {
                       href="/register_to_tenant.php"
                       role="button"
                     >
-                      Dodaj użytkownika do dzierżawy
+                      Add user to tenant
                     </a>
                   </div>
                 </>

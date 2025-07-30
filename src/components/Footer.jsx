@@ -47,8 +47,8 @@ const Footer = ({ toastMessages = [] }) => {
               <div className="toast-header">
                 <img src="/img/icon.png" width="16" height="16" className="rounded me-2" alt="..." />
                 <strong className="me-auto">Informacja</strong>
-                <small>Teraz</small>
-                <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Zamknij"></button>
+                <small>Now</small>
+                <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
               </div>
               <div className="toast-body">
                 {message}
