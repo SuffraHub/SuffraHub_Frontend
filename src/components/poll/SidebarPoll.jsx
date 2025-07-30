@@ -17,7 +17,7 @@ const Sidebar = () => {
 
   return (
     <>
-<div className="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary" style={{ height: '100vh' }}>
+<div className="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary" style={{ height: '90vh' }}>
       <div className="bg-body-tertiary" tabIndex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
         
           <h5 className="bg-dark text-light p-2">
