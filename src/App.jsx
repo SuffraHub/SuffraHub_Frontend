@@ -3,12 +3,16 @@ import { Routes, Route, HashRouter } from 'react-router-dom';
 // Layouty
 import LayoutDefault from './layouts/LayoutDefault.jsx';
 import LayoutAdmin from './layouts/LayoutAdmin.jsx';
+import LayoutPoll from './layouts/LayoutPoll.jsx';
 
 // Strony z layoutem zwykłym
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import RegisterToTenant from './pages/RegisterToTenant.jsx';
+
+// Strony polls - z panelem bocznym z listą pytań
+import PollPage from './pages/Poll.jsx';
 
 // Dashboard
 import AdminHome from './pages/AdminHome.jsx';
@@ -28,8 +32,12 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register/>}/>
-          <Route path="/register" element={<Register />} />
           <Route path="/admin/register_to_tenant" element={<RegisterToTenant />} />
+        </Route>
+
+{/* Layout 'głosowanie' */}
+        <Route element={<LayoutPoll />}>
+          <Route path="/poll" element={<PollPage />} />
         </Route>
 
         {/* Admin layout */}
