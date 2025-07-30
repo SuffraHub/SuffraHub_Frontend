@@ -1,12 +1,16 @@
 import { Routes, Route, HashRouter } from 'react-router-dom';
 
 // Layouty
-import LayoutDefault from './layouts/LayoutDefault.jsx';
+import LayoutLogin from './layouts/LayoutLogin.jsx';
 import LayoutAdmin from './layouts/LayoutAdmin.jsx';
 import LayoutPoll from './layouts/LayoutPoll.jsx';
+import LayoutHome from './layouts/LayoutHome.jsx';
 
-// Strony z layoutem zwykłym
+
+// Strona domowa
 import Home from './pages/Home.jsx';
+
+// Strony logowania
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import RegisterToTenant from './pages/RegisterToTenant.jsx';
@@ -28,8 +32,12 @@ const App = () => {
     <HashRouter>
       <Routes>
         {/* Publiczne layouty */}
-        <Route element={<LayoutDefault />}>
-          <Route path="/" element={<Home />} />
+        Layout home
+        <Route element={<LayoutHome />}>
+          <Route path="/" element={<Home />}/>
+        </Route>
+
+        <Route element={<LayoutLogin />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register/>}/>
           <Route path="/admin/register_to_tenant" element={<RegisterToTenant />} />

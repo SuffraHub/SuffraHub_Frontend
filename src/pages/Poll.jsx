@@ -11,6 +11,7 @@ function PollPage() {
   const currentPage = question_number;
 
   return (
+    <>
     <div
       className="container d-flex flex-column"
       style={{ minHeight: '80vh' }}
@@ -139,6 +140,7 @@ function PollPage() {
         </nav>
       </div>
     </div>
+    </>
   );
 }
 
