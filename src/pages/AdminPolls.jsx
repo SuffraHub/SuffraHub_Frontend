@@ -13,10 +13,10 @@ function AdminPolls() {
                                 </svg>
                             </Link>
                         </li>
-                        <li className="breadcrumb-item"><Link to="/admin">Panel administracyjny</Link></li>
-                        <li className="breadcrumb-item"><Link to="/admin/tenant">Dzierżawa</Link></li>
-                        <li className="breadcrumb-item active">Głosowania</li>
-                        <li className="breadcrumb-item active" aria-current="page">Utwórz głosowanie</li>
+                        <li className="breadcrumb-item"><Link to="/admin">Admin panel</Link></li>
+                        <li className="breadcrumb-item"><Link to="/admin/tenant">Tenant</Link></li>
+                        <li className="breadcrumb-item active">Polls</li>
+                        <li className="breadcrumb-item active" aria-current="page">Create poll</li>
                     </ol>
                 </h1>
 
@@ -33,16 +33,16 @@ function AdminPolls() {
             </div>
 
             <div className="card shadow-sm p-4 my-4">
-                <h4 className="card-title mb-3">Utwórz nowe głosowanie</h4>
+                <h4 className="card-title mb-3">Create new poll</h4>
                 <form className="mb-4" action="" method="post">
                     <div className="card-body">
                         <div className="form-floating mb-2">
                             <input type="text" className="form-control" id="poll_name" name="new_poll" placeholder="Pytanie" />
-                            <label htmlFor="poll_name">Nazwa</label>
+                            <label htmlFor="poll_name">Name</label>
                         </div>
                         <div className="form-floating mb-3">
                             <textarea className="form-control" placeholder="Opis" id="poll_description" name="new_poll_description" />
-                            <label htmlFor="poll_description">Opis</label>
+                            <label htmlFor="poll_description">Description</label>
                         </div>
                         <div className="form-floating mb-3">
                             <input
@@ -54,17 +54,17 @@ function AdminPolls() {
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="top"
                                 data-bs-html="true"
-                                title="Jeśli chcesz, aby głosowanie nie wygasało, ustaw datę wygaśniecia na 00-00-0000"
+                                title="To prevent the poll from expiring, set the expiry date to 00-00-0000"
                             />
                             <label htmlFor="poll_valid_to">
-                                Data ważności
+                                Expiry date
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="ms-1 bi bi-info-circle" viewBox="0 0 16 16">
                                     <path d="..." />
                                 </svg>
                             </label>
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-success">Utwórz głosowanie</button>
+                    <button type="submit" className="btn btn-success">Create poll</button>
                 </form>
             </div>
         </>

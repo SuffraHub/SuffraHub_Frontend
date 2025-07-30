@@ -7,16 +7,10 @@ function Admin() {
      document.title = 'Admin | SuffraHub';
    })
 
-   
- const mockToasts = [
-    "Głosowanie zostało zapisane",
-    "Zmieniono status ankiety"
-  ]; // to jest placeholder zeby sie toast wyswietlal
-
   return (
     <>
-    <h1>To jest AdminHome!</h1>
-    					<h1 class="text-warning fw-bold">Tu będą rzeczy. Patrz panel boczny.</h1>
+    <h1>Welcome to AdminHome!</h1>
+    					<h1 class="text-warning fw-bold">Changes will appear here. See the sidebar.</h1>
 
       {/* <div>
         <a href="https://vite.dev" target="_blank">

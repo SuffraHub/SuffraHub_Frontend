@@ -13,9 +13,9 @@ function AdminQuestion() {
                 </svg>
               </Link>
             </li>
-            <li className="breadcrumb-item"><Link to="/admin">Panel administracyjny</Link></li>
-            <li className="breadcrumb-item"><Link to="/admin_tenant">Dzierżawa</Link></li>
-            <li className="breadcrumb-item active" aria-current="page">Baza pytań</li>
+            <li className="breadcrumb-item"><Link to="/admin">Admin panel</Link></li>
+            <li className="breadcrumb-item"><Link to="/admin_tenant">Tenant</Link></li>
+            <li className="breadcrumb-item active" aria-current="page">Questions</li>
           </ol>
         </h1>
         {/* <div className="btn-toolbar mb-2 mb-md-0">
@@ -31,36 +31,36 @@ function AdminQuestion() {
       </div>
 
       <div className="card shadow-sm p-4 my-4">
-        <h5>Pytania</h5>
-        <h4 className="card-title mb-3">Utwórz nowe pytanie</h4>
+        <h5>Questions</h5>
+        <h4 className="card-title mb-3"></h4>
         <form className="mb-4" action="" method="post">
           <div className="card-body">
             <div className="form-floating mb-2">
-              <input type="text" className="form-control" id="question_name" name="new_question" placeholder="Pytanie" />
-              <label htmlFor="question_name">Pytanie</label>
+              <input type="text" className="form-control" id="question_name" name="new_question" placeholder="Question" />
+              <label htmlFor="question_name">Question</label>
             </div>
             <div className="form-floating mb-3">
               <textarea className="form-control" placeholder="Opis" id="question_description" name="new_question_description"></textarea>
-              <label htmlFor="question_description">Opis</label>
+              <label htmlFor="question_description">Description</label>
             </div>
           </div>
-          <button type="submit" className="btn btn-success">Utwórz pytanie</button>
+          <button type="submit" className="btn btn-success">Save question</button>
         </form>
       </div>
 
-      <h5>Pytania w dzierżawie</h5>
+      <h5>Tenant's questions</h5>
       <div className="card-body">
         <div className="overflow-x-auto" style={{ maxWidth: "100%" }}>
           <table className="table table-striped table-sm">
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Pytanie</th>
-                <th scope="col">Opis</th>
-                <th scope="col">Ukryte</th>
-                <th scope="col">Data utworzenia</th>
-                <th scope="col">Utworzone przez</th>
-                <th scope="col">Akcje</th>
+                <th scope="col">Question</th>
+                <th scope="col">Description</th>
+                <th scope="col">Hidden</th>
+                <th scope="col">Creation date</th>
+                <th scope="col">Created by</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>

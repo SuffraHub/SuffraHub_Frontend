@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Dodany import
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   const [activePolls] = useState([
-    { id: 1, name: 'Aktywne głosowanie 1' },
-    { id: 2, name: 'Aktywne głosowanie 2' },
+    { id: 1, name: 'Ongoing voting 1' },
+    { id: 2, name: 'Ongoing voting 2' },
   ]);
 
   const [closedPolls] = useState([
-    { id: 3, name: 'Zamknięte głosowanie 1' },
+    { id: 3, name: 'Voting closed 1' },
   ]);
 
   const [inactivePolls] = useState([
-    { id: 4, name: 'Nieaktywne głosowanie 1' },
+    { id: 4, name: 'Inactive voting 1' },
   ]);
+
+  // Stany widoczności sekcji
+  const [isActiveOpen, setIsActiveOpen] = useState(true);
+  const [isClosedOpen, setIsClosedOpen] = useState(false);
+  const [isInactiveOpen, setIsInactiveOpen] = useState(false);
 
   const renderPollList = (polls) => (
     <ul className="ms-2">
@@ -30,7 +35,7 @@ const Sidebar = () => {
           </li>
         ))
       ) : (
-        <li className="text-secondary">brak</li>
+        <li className="text-secondary">none</li>
       )}
     </ul>
   );
@@ -40,7 +45,7 @@ const Sidebar = () => {
       <div className="offcanvas-md offcanvas-end bg-body-tertiary" tabIndex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
         <div className="offcanvas-header">
           <h5 className="offcanvas-title text-white" id="sidebarMenuLabel">
-            Dzierżawa:<br /> <b>Firma ABC</b>
+            Tenant:<br /> <b>Firm ABC</b>
           </h5>
           <button type="button" className="btn-close text-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
         </div>
@@ -49,38 +54,38 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2 active" to="/">
                 <i className="bi bi-house-fill text-black"></i>
-                Strona główna
+                Homepage
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/admin">
                 <i className="bi bi-house-gear-fill text-black"></i>
-                Panel administracyjny
+                Admin panel
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/questions">
                 <i className="bi bi-database text-black"></i>
-                Baza pytań
+                Questions
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/tenant">
                 <i className="bi bi-people text-black"></i>
-                Dzierżawa
+                Tenant
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/reports">
                 <i className="bi bi-graph-up text-black"></i>
-                Raporty
+                Reports
               </Link>
             </li>
           </ul>
 
           <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
-            <span>Moje głosowania</span>
-            <Link className="link-secondary" to="/polls/new" aria-label="Dodaj nowe głosowanie">
+            <span>My polls</span>
+            <Link className="link-secondary" to="/polls/new" aria-label="Add a new poll">
               <i className="bi bi-plus-circle text-black"></i>
             </Link>
           </h6>
@@ -88,35 +93,62 @@ const Sidebar = () => {
           <ul className="nav flex-column mb-auto">
             {/* Aktywne */}
             <li className="nav-item">
-              <a className="nav-link d-flex align-items-center gap-2" data-bs-toggle="collapse" href="#collapseActive" role="button">
+              <button
+                className="nav-link d-flex align-items-center gap-2 btn btn-link"
+                onClick={() => setIsActiveOpen(!isActiveOpen)}
+                aria-expanded={isActiveOpen}
+                aria-controls="collapseActive"
+                style={{ textDecoration: 'none' }}
+              >
                 <i className="bi bi-file-earmark-text text-black"></i>
-                Otwarte <i className="bi bi-chevron-down text-black"></i>
-              </a>
-              <div className="collapse show" id="collapseActive">
-                {renderPollList(activePolls)}
-              </div>
+                Open
+                <i className={`bi ms-auto text-black ${isActiveOpen ? 'bi-chevron-up' : 'bi-chevron-down'}`}></i>
+              </button>
+              {isActiveOpen && (
+                <div id="collapseActive">
+                  {renderPollList(activePolls)}
+                </div>
+              )}
             </li>
 
             {/* Zamknięte */}
             <li className="nav-item">
-              <a className="nav-link d-flex align-items-center gap-2" data-bs-toggle="collapse" href="#collapseClosed" role="button">
+              <button
+                className="nav-link d-flex align-items-center gap-2 btn btn-link"
+                onClick={() => setIsClosedOpen(!isClosedOpen)}
+                aria-expanded={isClosedOpen}
+                aria-controls="collapseClosed"
+                style={{ textDecoration: 'none' }}
+              >
                 <i className="bi bi-file-earmark-text text-black"></i>
-                Zamknięte <i className="bi bi-chevron-down text-black"></i>
-              </a>
-              <div className="collapse" id="collapseClosed">
-                {renderPollList(closedPolls)}
-              </div>
+                Closed
+                <i className={`bi ms-auto text-black ${isClosedOpen ? 'bi-chevron-up' : 'bi-chevron-down'}`}></i>
+              </button>
+              {isClosedOpen && (
+                <div id="collapseClosed">
+                  {renderPollList(closedPolls)}
+                </div>
+              )}
             </li>
 
             {/* Nieaktywne */}
             <li className="nav-item">
-              <a className="nav-link d-flex align-items-center gap-2" data-bs-toggle="collapse" href="#collapseInactive" role="button">
+              <button
+                className="nav-link d-flex align-items-center gap-2 btn btn-link"
+                onClick={() => setIsInactiveOpen(!isInactiveOpen)}
+                aria-expanded={isInactiveOpen}
+                aria-controls="collapseInactive"
+                style={{ textDecoration: 'none' }}
+              >
                 <i className="bi bi-file-earmark-text text-black"></i>
-                Nieaktywne <i className="bi bi-chevron-down text-black"></i>
-              </a>
-              <div className="collapse" id="collapseInactive">
-                {renderPollList(inactivePolls)}
-              </div>
+                Inactive
+                <i className={`bi ms-auto text-black ${isInactiveOpen ? 'bi-chevron-up' : 'bi-chevron-down'}`}></i>
+              </button>
+              {isInactiveOpen && (
+                <div id="collapseInactive">
+                  {renderPollList(inactivePolls)}
+                </div>
+              )}
             </li>
           </ul>
 
@@ -125,20 +157,19 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/account">
                 <i className="bi bi-gear-wide-connected text-black"></i>
-                Ustawienia
+                Settings
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/logout">
                 <i className="bi bi-door-closed text-black"></i>
-                Wyloguj
+                Log out
               </Link>
             </li>
           </ul>
         </div>
       </div>
     </div>
-    
   );
 };
 

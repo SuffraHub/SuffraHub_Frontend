@@ -3,18 +3,25 @@ import { Routes, Route, HashRouter } from 'react-router-dom';
 // Layouty
 import LayoutDefault from './layouts/LayoutDefault.jsx';
 import LayoutAdmin from './layouts/LayoutAdmin.jsx';
+import LayoutPoll from './layouts/LayoutPoll.jsx';
 
-// Strony publiczne
+// Strony z layoutem zwykłym
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
-// import RegisterPage from './pages/Register.jsx'; // jeśli chcesz dodać rejestrację
-
-// Strony admina
-import AdminHome from './pages/AdminHome.jsx';
 import Register from './pages/Register.jsx';
+import RegisterToTenant from './pages/RegisterToTenant.jsx';
+
+// Strony polls - z panelem bocznym z listą pytań
+import PollPage from './pages/Poll.jsx';
+
+// Dashboard
+import AdminHome from './pages/AdminHome.jsx';
 import AdminPolls from './pages/AdminPolls.jsx';
 import AdminQuestion from './pages/AdminQuestions.jsx';
 import AdminAccount from './pages/AdminAccount.jsx';
+import AdminTenant from './pages/AdminTenant.jsx';
+import QuestionEdit from './pages/QuestionEdit.jsx';
+import VoteCodes from './pages/VoteCodes.jsx';
 
 const App = () => {
   return (
@@ -25,15 +32,23 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register/>}/>
-          {/* <Route path="/register" element={<RegisterPage />} /> */}
+          <Route path="/admin/register_to_tenant" element={<RegisterToTenant />} />
+        </Route>
+
+{/* Layout 'głosowanie' */}
+        <Route element={<LayoutPoll />}>
+          <Route path="/poll" element={<PollPage />} />
         </Route>
 
         {/* Admin layout */}
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<AdminHome />} />
-          <Route path="polls" element={<AdminPolls />} />
-          <Route path="questions" element={<AdminQuestion/>}/>
-          <Route path="account" element={<AdminAccount/>}/>
+          <Route path="/admin/polls" element={<AdminPolls />} />
+          <Route path="/admin/questions" element={<AdminQuestion/>}/>
+          <Route path="/admin/account" element={<AdminAccount/>}/>
+          <Route path="/admin/tenant" element={<AdminTenant />}/>
+          <Route path="/admin/questions/edit" element={<QuestionEdit />}/>
+          <Route path="/admin/polls/vote_codes" element={<VoteCodes />}/>
         </Route>
 
       </Routes>
