@@ -7,14 +7,14 @@ const VoteCodes = () => {
   return (
     <>
             <div className="card shadow-sm p-4 my-4">
-        <h5 className="card-title mb-3">Generowanie kodów głosowania</h5>
+        <h5 className="card-title mb-3">Poll codes generating</h5>
         <form
           action="/generate_codes.php" // Placeholder, backend nieobsługiwany
           method="post"
           target="pdfFrame"
         >
           <div className="mb-3">
-            <label htmlFor="code_count" className="form-label">Liczba kodów do wygenerowania</label>
+            <label htmlFor="code_count" className="form-label">Number of codes to generate</label>
             <input
               type="number"
               className="form-control"
@@ -27,7 +27,7 @@ const VoteCodes = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary">Wygeneruj PDF</button>
+          <button type="submit" className="btn btn-primary">Generate PDF</button>
         </form>
       </div>
 

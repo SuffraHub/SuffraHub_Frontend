@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const EditQuestion = () => {
-  const [question, setQuestion] = useState('Jakie jest twoje ulubione miasto?');
-  const [description, setDescription] = useState('Opis przykładowego pytania.');
+  const [question, setQuestion] = useState("What's your favorite city?");
+  const [description, setDescription] = useState('Question description example');
   const [hidden, setHidden] = useState(false);
 
   return (
@@ -11,8 +11,8 @@ const EditQuestion = () => {
      
 
       <div className="card shadow-sm p-4 my-4">
-        <h5>Pytania</h5>
-        <h4 className="card-title mb-3">Edycja pytania</h4>
+        <h5>Questions</h5>
+        <h4 className="card-title mb-3">Edit question</h4>
         <form className="mb-4">
           <div className="card-body">
             <input type="hidden" name="question_id" value="1" />
@@ -26,7 +26,7 @@ const EditQuestion = () => {
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
               />
-              <label htmlFor="question_name">Pytanie</label>
+              <label htmlFor="question_name">Question</label>
             </div>
             <div className="form-floating mb-3">
               <textarea
@@ -37,7 +37,7 @@ const EditQuestion = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
-              <label htmlFor="question_description">Opis</label>
+              <label htmlFor="question_description">Description</label>
             </div>
 
             <div className="form-check mb-3">
@@ -49,7 +49,7 @@ const EditQuestion = () => {
                 onChange={() => setHidden(!hidden)}
               />
               <label className="form-check-label" htmlFor="hidden">
-                Ukryte
+                Hidden
               </label>
             </div>
 
@@ -60,10 +60,10 @@ const EditQuestion = () => {
                 className="form-control-plaintext"
                 id="created_at"
                 name="created_at"
-                placeholder="Utworzono"
+                placeholder="Created"
                 value="2025-07-01 10:30:00"
               />
-              <label htmlFor="created_at">Data utworzenia</label>
+              <label htmlFor="created_at">Creation date</label>
             </div>
             <div className="form-floating mb-2">
               <input
@@ -75,10 +75,10 @@ const EditQuestion = () => {
                 placeholder="Utworzono przez"
                 value="Jan Kowalski (jankowal)"
               />
-              <label htmlFor="created_by">Utworzone przez</label>
+              <label htmlFor="created_by">Created by</label>
             </div>
           </div>
-          <button type="submit" className="btn btn-success">Zapisz zmiany</button>
+          <button type="submit" className="btn btn-success">Save changes</button>
         </form>
       </div>
     </div>

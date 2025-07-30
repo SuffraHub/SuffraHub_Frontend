@@ -5,10 +5,9 @@ const Register = () => {
 
   // Tymczasowo – lista dostępnych uprawnień (mock)
   const permissionsList = [
-    { permissions: 1, description: 'Użytkownik' },
-    { permissions: 2, description: 'Moderator' },
+    { permissions: 1, description: 'User' },
     { permissions: 3, description: 'Administrator' },
-    { permissions: 4, description: 'Superadmin' }
+    { permissions: 4, description: 'Head administrator' }
   ];
 
   return (
@@ -18,21 +17,21 @@ const Register = () => {
         <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0" />
       </svg>
       <h2 className="fs-2 fw-bold">SuffraHub</h2>
-      <h1 className="h3 mb-3 fw-normal">Rejestracja do dzierżawy</h1>
+      <h1 className="h3 mb-3 fw-normal">Register to tenant</h1>
 
       <form className="w-100" style={{ maxWidth: 380 }}>
         <div className="form-floating mb-3">
-          <input type="text" className="form-control" id="username" placeholder="Nazwa użytkownika" />
-          <label htmlFor="username">Nazwa użytkownika</label>
+          <input type="text" className="form-control" id="username" placeholder="Username" />
+          <label htmlFor="username">Username</label>
         </div>
 
         <div className="form-floating mb-1">
-          <input type="text" className="form-control" id="imie" placeholder="Imię" />
-          <label htmlFor="imie">Imię</label>
+          <input type="text" className="form-control" id="imie" placeholder="Name" />
+          <label htmlFor="imie">Name</label>
         </div>
         <div className="form-floating mb-3">
-          <input type="text" className="form-control" id="nazwisko" placeholder="Nazwisko" />
-          <label htmlFor="nazwisko">Nazwisko</label>
+          <input type="text" className="form-control" id="nazwisko" placeholder="Surname" />
+          <label htmlFor="nazwisko">Surname</label>
         </div>
 
         <div className="form-floating mb-1">
@@ -40,33 +39,33 @@ const Register = () => {
           <label htmlFor="email">Email</label>
         </div>
         <div className="form-floating mb-3">
-          <input type="email" className="form-control" id="confirm_email" placeholder="Powtórz E-mail" />
-          <label htmlFor="confirm_email">Powtórz E-mail</label>
+          <input type="email" className="form-control" id="confirm_email" placeholder="Confirm E-mail" />
+          <label htmlFor="confirm_email">Confirm E-mail</label>
         </div>
 
         <div className="form-floating">
-          <input type="password" className="form-control" id="password" placeholder="Hasło" />
-          <label htmlFor="password">Hasło</label>
+          <input type="password" className="form-control" id="password" placeholder="Password" />
+          <label htmlFor="password">Password</label>
         </div>
         <div className="form-floating mb-3">
-          <input type="password" className="form-control" id="confirm_password" placeholder="Potwierdź hasło" />
-          <label htmlFor="confirm_password">Potwierdź hasło</label>
+          <input type="password" className="form-control" id="confirm_password" placeholder="Confirm password" />
+          <label htmlFor="confirm_password">Confirm password</label>
         </div>
 
-        <label htmlFor="permissions" className="form-label">Uprawnienia</label>
+        <label htmlFor="permissions" className="form-label">Permission</label>
         <select className="form-select mb-3" id="permissions">
           {permissionsList.map(p => (
             <option key={p.permissions} value={p.permissions}>{p.description}</option>
           ))}
         </select>
 
-        <button className="btn btn-primary w-100 py-2" type="submit">Zarejestruj użytkownika do dzierżawy</button>
+        <button className="btn btn-primary w-100 py-2" type="submit">Register user to tenant</button>
       </form>
 
       {statusMessage && <h3 className="fw-bold mt-4 text-danger">{statusMessage}</h3>}
 
       <span className="pt-2">
-        <a href="/#/admin/tenant">Powrót</a>
+        <a href="/#/admin/tenant">Go back</a>
       </span>
     </main>
   );

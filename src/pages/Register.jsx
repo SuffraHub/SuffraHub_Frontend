@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 export default function Register() {
   const [form, setForm] = useState({
     username: "",
-    imie: "",
-    nazwisko: "",
+    name: "",
+    surname: "",
     email: "",
     confirmEmail: "",
     password: "",
@@ -23,23 +23,23 @@ export default function Register() {
     const { username, email, confirmEmail, password, confirmPassword } = form;
 
     if (Object.values(form).some((field) => field.trim() === "")) {
-      return "Wszystkie pola są wymagane.";
+      return "All fields are require.";
     }
 
     if (email !== confirmEmail) {
-      return "Adresy e-mail się nie zgadzają.";
+      return "Emails do not match.";
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return "Nieprawidłowy format adresu e-mail.";
+      return "Invalid email format.";
     }
 
     if (username.length < 3 || username.length > 30) {
-      return "Nazwa użytkownika musi mieć od 3 do 30 znaków.";
+      return "Username must have from 3 up to 30 characters.";
     }
 
     if (password !== confirmPassword) {
-      return "Hasła się nie zgadzają.";
+      return "Passwords do not match.";
     }
 
     if (
@@ -49,7 +49,7 @@ export default function Register() {
       !/\d/.test(password) ||
       !/[\W_]/.test(password)
     ) {
-      return "Hasło musi mieć co najmniej 8 znaków, zawierać wielką i małą literę, cyfrę oraz znak specjalny.";
+      return "Password must contain at least 8 characters, including at least one uppercase and lowercase letter, digit oraz special character.";
     }
 
     return ""; // brak błędów
@@ -61,9 +61,9 @@ export default function Register() {
     if (error) {
       setStatusMessage(error);
     } else {
-      setStatusMessage("Rejestracja zakończona sukcesem (tymczasowo).");
+      setStatusMessage("Registration completed.");
       // Tu mógłbyś wysłać dane np. do API lub lokalnie przechować
-      console.log("Formularz przesłany:", form);
+      console.log("Form submitted:", form);
     }
   };
 
@@ -82,22 +82,22 @@ export default function Register() {
         <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0" />
       </svg>
       <h1 className="fs-2 fw-bold">SuffraHub</h1>
-      <h2 className="h3 mb-3 fw-normal">Rejestracja</h2>
+      <h2 className="h3 mb-3 fw-normal">Sign up</h2>
 
       <form className="w-100" style={{ maxWidth: 380 }} onSubmit={handleSubmit}>
         <div className="form-floating mb-3">
-          <input type="text" className="form-control" id="username" placeholder="Nazwa użytkownika" name="username" value={form.username} onChange={handleChange} />
-          <label htmlFor="username">Nazwa użytkownika</label>
+          <input type="text" className="form-control" id="username" placeholder="Username" name="username" value={form.username} onChange={handleChange} />
+          <label htmlFor="username">Username</label>
         </div>
 
         <div className="form-floating mb-1">
-          <input type="text" className="form-control" id="imie" placeholder="Imię" name="imie" value={form.imie} onChange={handleChange} />
-          <label htmlFor="imie">Imię</label>
+          <input type="text" className="form-control" id="name" placeholder="Name" name="name" value={form.name} onChange={handleChange} />
+          <label htmlFor="name">Name</label>
         </div>
 
         <div className="form-floating mb-3">
-          <input type="text" className="form-control" id="nazwisko" placeholder="Nazwisko" name="nazwisko" value={form.nazwisko} onChange={handleChange} />
-          <label htmlFor="nazwisko">Nazwisko</label>
+          <input type="text" className="form-control" id="surname" placeholder="Surname" name="surname" value={form.surname} onChange={handleChange} />
+          <label htmlFor="surname">Surname</label>
         </div>
 
         <div className="form-floating mb-1">
@@ -106,27 +106,27 @@ export default function Register() {
         </div>
 
         <div className="form-floating mb-3">
-          <input type="email" className="form-control" id="confirmEmail" placeholder="Powtórz Email" name="confirmEmail" value={form.confirmEmail} onChange={handleChange} />
-          <label htmlFor="confirmEmail">Powtórz Email</label>
+          <input type="email" className="form-control" id="confirmEmail" placeholder="Confirm email" name="confirmEmail" value={form.confirmEmail} onChange={handleChange} />
+          <label htmlFor="confirmEmail">Confirm email</label>
         </div>
 
         <div className="form-floating mb-1">
-          <input type="password" className="form-control" id="password" placeholder="Hasło" name="password" value={form.password} onChange={handleChange} />
-          <label htmlFor="password">Hasło</label>
+          <input type="password" className="form-control" id="password" placeholder="Password" name="password" value={form.password} onChange={handleChange} />
+          <label htmlFor="password">Password</label>
         </div>
 
         <div className="form-floating mb-3">
-          <input type="password" className="form-control" id="confirmPassword" placeholder="Potwierdź hasło" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} />
-          <label htmlFor="confirmPassword">Potwierdź hasło</label>
+          <input type="password" className="form-control" id="confirmPassword" placeholder="Confirm password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} />
+          <label htmlFor="confirmPassword">Confirm password</label>
         </div>
 
-        <button className="btn btn-primary w-100 py-2" type="submit">Zarejestruj się</button>
+        <button className="btn btn-primary w-100 py-2" type="submit">Sign up</button>
       </form>
 
       {statusMessage && <div className="fw-bold mt-4 text-danger">{statusMessage}</div>}
 
       <span className="pt-2 d-block">
-        Masz konto? <Link to="/login">Zaloguj się!</Link>
+        Already have an account? <Link to="/login">Log in!</Link>
       </span>
     </main>
   );
