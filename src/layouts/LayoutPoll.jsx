@@ -1,24 +1,12 @@
 import { Outlet, Link } from "react-router-dom";
 import SidebarPoll from '../components/poll/SidebarPoll.jsx';
 import Footer from '../components/Footer.jsx';
+import HeaderHome from '../components/home/HeaderHome.jsx';
 
 const LayoutAdmin = () => {
   return (
     <>
-    <nav className="navbar bg-body-tertiary border">
-      <div className="container-fluid">
-        <Link className="navbar-brand align-self-center" to="#">
-          <img
-            src="/img/icon.png"
-            alt="Logo"
-            width="30"
-            height="30"
-            className="d-inline-block align-text-top"
-          />
-          <b>SuffraHub</b>
-        </Link>
-      </div>
-    </nav>
+    <HeaderHome />
         <div className="container-fluid">
           <div className="row">
             <SidebarPoll />
