@@ -1,21 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const AdminHeader = () => {
   const roleDescription = "Administrator"; // Placeholder
-  const companyName = "Firm XYZ";        // Placeholder
+  const companyName = "Firm XYZ";         // Placeholder
+
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-bs-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   return (
     <header className="navbar sticky-top bg-dark flex-md-nowrap p-1 shadow" data-bs-theme="dark">
-      <a className="navbar-brand col-md-5 col-lg-2 me-0 px-3 fs-6 text-white text-wrap" href="/admin.php">
+      {/* Left: Tenant info */}
+      <a className="navbar-brand col-md-4 col-lg-2 me-0 px-3 fs-6 text-white text-wrap" href="/admin.php">
         Tenant:<br /> <b>{companyName}</b>
       </a>
-      <a className="btn btn-outline-light text-wrap ms-2 me-4 mb-2 mt-2" href="/admin_account.php">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-          className="bi bi-person-fill" viewBox="0 0 16 16">
-          <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-        </svg>
-        &nbsp;Role: <b>{roleDescription}</b>
-      </a>
+
+      {/* Center space filler */}
+      <div className="flex-grow-1 d-flex justify-content-end align-items-center pe-2">
+        {/* Dark mode toggle button */}
+        <button
+          onClick={toggleTheme}
+          className="btn btn-outline-light me-2"
+          title="Toggle dark/light mode"
+        >
+          {theme === 'dark' ? (
+            <i className="bi bi-sun-fill"></i>
+          ) : (
+            <i className="bi bi-moon-fill"></i>
+          )}
+        </button>
+
+        {/* Role button */}
+        <a className="btn btn-outline-light text-nowrap" href="/admin_account.php">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            className="bi bi-person-fill" viewBox="0 0 16 16">
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+          </svg>
+          &nbsp;Role: <b>{roleDescription}</b>
+        </a>
+      </div>
+
+      {/* Mobile sidebar toggle */}
       <ul className="navbar-nav flex-row d-md-none">
         <li className="nav-item text-nowrap">
           <button className="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas"
@@ -29,13 +60,8 @@ const AdminHeader = () => {
           </button>
         </li>
       </ul>
-      <div id="navbarSearch" className="navbar-search w-100 collapse">
-        <input className="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search" />
-      </div>
     </header>
   );
 };
-
-
 
 export default AdminHeader;
