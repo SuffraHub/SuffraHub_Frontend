@@ -35,7 +35,6 @@ function AdminQuestion() {
   return (
     <div className="container py-3">
       <div className="card shadow-sm p-4 my-4">
-        <h5>Questions</h5>
         <h4 className="card-title mb-3">Create New Question</h4>
         <form className="mb-4">
           <div className="card-body">
@@ -121,7 +120,7 @@ function AdminQuestion() {
                   <td>{vote.expireDate}</td>
                   <td>{vote.createdAt}</td>
                   <td>{vote.createdBy}</td>
-                  <td className="d-flex justify-content-center align-items-center">
+                  <td className="text-center">
                     <button className="btn btn-sm btn-primary">Edit</button>
                   </td>
                 </tr>
