@@ -1,40 +1,47 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
-  const [formData, setFormData] = useState({ username: '', password: '', remember_me: false });
-  const [statusMessage, setStatusMessage] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    remember_me: false
+  });
+
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  function handleChange(e) {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === 'checkbox' ? checked : value
     }));
-  };
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        navigate('/admin');
-      } else {
-        setStatusMessage(data.message || 'Invalid username or password.');
-      }
-    } catch (error) {
-      setStatusMessage('An error occurred while logging in.');
+  function loginClick() {
+    if (formData.username.trim().length === 0) {
+      setMessage("Username is required.");
+    } else if (formData.password.trim().length === 0) {
+      setMessage("Password is required.");
+    } else {
+      axios.post('http://localhost:8000/login', {
+        username: formData.username,
+        password: formData.password
+      })
+        .then((res) => {
+          if (res.data.success) {
+            navigate('/admin');
+          } else {
+            setMessage(res.data.message || "Login failed.");
+          }
+        })
+        .catch((err) => {
+          setMessage(err.response?.data?.message || "An error occurred while logging in.");
+        });
     }
-  };
+  }
 
   return (
     <main className="form-signin w-100 m-auto d-flex align-items-center flex-column py-5 bg-body-tertiary">
@@ -42,10 +49,11 @@ function Login() {
         <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z" />
         <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0" />
       </svg>
+
       <h1 className="fs-2 fw-bold">SuffraHub</h1>
       <h2 className="h4 mb-3 fw-normal">Log in</h2>
 
-      <form className="w-100" style={{ maxWidth: '400px' }} onSubmit={handleSubmit}>
+      <form className="w-100" style={{ maxWidth: '400px' }} onSubmit={(e) => { e.preventDefault(); loginClick(); }}>
         <div className="form-floating mb-3">
           <input
             type="text"
@@ -88,8 +96,8 @@ function Login() {
 
         <button className="btn btn-primary w-100 py-2" type="submit">Log in</button>
 
-        {statusMessage && (
-          <div className="fw-bold mt-4 text-danger text-center">{statusMessage}</div>
+        {message && (
+          <div className="fw-bold mt-4 text-danger text-center">{message}</div>
         )}
       </form>
 
