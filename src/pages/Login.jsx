@@ -102,7 +102,7 @@ function Login() {
       </form>
 
       <span className="mt-3">
-        Don’t have an account? <Link to="/register">Register here</Link>
+        Don’t have an account? <Link to="/user/register">Register here</Link>
       </span>
     </main>
   );

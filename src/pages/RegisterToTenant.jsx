@@ -65,7 +65,7 @@ const Register = () => {
       {statusMessage && <h3 className="fw-bold mt-4 text-danger">{statusMessage}</h3>}
 
       <span className="pt-2">
-        <a href="/#/admin/tenant">Go back</a>
+        <Link to="/admin/tenant">Go back</Link>
       </span>
     </main>
   );

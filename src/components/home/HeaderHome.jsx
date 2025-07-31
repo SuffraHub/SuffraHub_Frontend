@@ -15,16 +15,16 @@ const HeaderHome = () => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <i class="bi bi-list"></i>
+            <i className="bi bi-list"></i>
           </button>
           <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li>
               <Link to="/login" className="dropdown-item text-success fw-bold">
-                <i class="bi bi-door-open"></i> Login
+                <i className="bi bi-door-open"></i> Login
               </Link>
             </li>
             <li><hr className="dropdown-divider" /></li>
-            <li><button className="dropdown-item fw-bold" disabled><i class="bi bi-door-closed"></i> Logout</button></li>
+            <li><button className="dropdown-item fw-bold" disabled><i className="bi bi-door-closed"></i> Logout</button></li>
           </ul>
         </div>
 
@@ -45,7 +45,7 @@ const HeaderHome = () => {
         {/* Toggle Dark Mode po prawej */}
         <div>
           <button className="btn btn-outline-secondary">
-            <i class="bi bi-moon-stars-fill"></i>
+            <i className="bi bi-moon-stars-fill"></i>
           </button>
         </div>
 
