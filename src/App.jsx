@@ -37,10 +37,10 @@ const App = () => {
           <Route path="/" element={<Home />}/>
         </Route>
 
-        <Route element={<LayoutLogin />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register/>}/>
-          <Route path="/admin/register_to_tenant" element={<RegisterToTenant />} />
+        <Route path="/user" element={<LayoutLogin />}>
+          <Route path="/user/login" element={<Login />} />
+          <Route path="/user/register" element={<Register/>}/>
+          <Route path="/user/admin/register_to_tenant" element={<RegisterToTenant />} />
         </Route>
 
 {/* Layout 'głosowanie' */}
