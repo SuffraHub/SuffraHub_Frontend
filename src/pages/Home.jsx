@@ -56,7 +56,11 @@ function Home() {
           setPollId(pollId); // save poll ID if needed later
           setStatusMessage('✅ Token accepted. Redirecting...');
           setTimeout(() => {
-            navigate('/poll');
+            navigate('/poll', {
+              state: {
+                pollId: pollId
+              }
+            });
           }, 1000);
         } else {
           setStatusMessage('❌ Invalid token or poll not found.');

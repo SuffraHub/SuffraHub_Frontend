@@ -30,7 +30,6 @@ function PollPage() {
   </div>
 </h1>
 
-				<p class="lead card p-3 text-start">
 <form>
   <div className="form-check mb-3 d-flex align-items-center gap-3">
     <input
@@ -82,7 +81,6 @@ function PollPage() {
 </form>
 
 
-				</p>
         
 <button
         type="button"
