@@ -20,7 +20,7 @@ function AdminQuestions() {
       const mockVotes = [
         {
           id: 1,
-          question: "What’s your favorite color?",
+          question: "Do you like our service?",
           description: "Pick one from the list",
           hidden: false,
           expireDate: "2025-08-15",
@@ -31,8 +31,8 @@ function AdminQuestions() {
         },
         {
           id: 2,
-          question: "Which city do you prefer?",
-          description: "Choose your favorite",
+          question: "Do you prefer online voting?",
+          description: "Choose your answer",
           hidden: true,
           expireDate: "2025-09-01",
           createdAt: "2025-07-20 15:00:00",
