@@ -27,7 +27,7 @@ const DraggableAnswer = ({ id, label, onDelete, isCustom }) => {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    userSelect: "none",  // disable text selection for better drag UX
+    userSelect: "none",
   };
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
@@ -59,8 +59,13 @@ const DroppableColumn = ({ id, children, title, icon, doubleHeight, extraWide })
 
   return (
     <div className={extraWide ? "col-md-6" : "col-md-3"}>
-      <h5><i className={`bi ${icon} me-2`}></i>{title}</h5>
-      <div ref={setNodeRef} style={style}>{children}</div>
+      <h5>
+        <i className={`bi ${icon} me-2`}></i>
+        {title}
+      </h5>
+      <div ref={setNodeRef} style={style}>
+        {children}
+      </div>
     </div>
   );
 };
@@ -69,6 +74,9 @@ const QuestionEdit = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state;
+
+  // If editing, data contains existing question, else undefined
+  const isEditing = Boolean(data && data.id);
 
   const [question, setQuestion] = useState(data?.question || "");
   const [description, setDescription] = useState(data?.description || "");
@@ -81,15 +89,12 @@ const QuestionEdit = () => {
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [newCustom, setNewCustom] = useState("");
 
-  // All votes loaded for table below
   const [allVotes, setAllVotes] = useState([]);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor)
-  );
+  const sensors = useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor));
 
   useEffect(() => {
+    // Initialize default answers
     const initialAnswers = [
       { label: "Yes", type: "positive" },
       { label: "Agree", type: "positive" },
@@ -105,24 +110,26 @@ const QuestionEdit = () => {
     setNegativeAnswers(initialAnswers.filter((a) => a.type === "negative"));
     setNeutralAnswers(initialAnswers.filter((a) => a.type === "neutral"));
 
-    // Load all votes for the table below
+    // Load saved votes/questions from localStorage
     const votes = JSON.parse(localStorage.getItem("votes")) || [];
     setAllVotes(votes);
 
-    // Pre-fill selectedAnswers with the data answers if available
-    if (data?.answerType) {
-      // answerType is array of labels, match them to all answers
+    if (isEditing) {
+      // Load selected answers from question's answerType (array of labels)
       const allAnswers = [...initialAnswers];
-      const selected = data.answerType
-        .map((label) => {
-          // search in initialAnswers + customAnswers if available
-          let found = allAnswers.find((a) => a.label === label);
-          if (!found) found = { id: uuidv4(), label, type: "custom" };
-          return found;
-        });
+      const selected = (data.answerType || []).map((label) => {
+        // Search in initial + custom answers
+        let found = allAnswers.find((a) => a.label === label);
+        if (!found) found = { id: uuidv4(), label, type: "custom" };
+        return found;
+      });
       setSelectedAnswers(selected);
+
+      // Extract any custom answers not in initial answers
+      const custom = selected.filter((a) => a.type === "custom");
+      setCustomAnswers(custom);
     }
-  }, [data]);
+  }, [data, isEditing]);
 
   const removeFromAll = (id) => {
     setPositiveAnswers((prev) => prev.filter((a) => a.id !== id));
@@ -134,68 +141,125 @@ const QuestionEdit = () => {
 
   const handleDragEnd = ({ active, over }) => {
     if (!over) return;
-    const allSources = [
-      ...positiveAnswers,
-      ...negativeAnswers,
-      ...neutralAnswers,
-      ...customAnswers,
-      ...selectedAnswers,
-    ];
-    const draggedItem = allSources.find((a) => a.id === active.id);
+
+    const draggedItem =
+      positiveAnswers.find((a) => a.id === active.id) ||
+      negativeAnswers.find((a) => a.id === active.id) ||
+      neutralAnswers.find((a) => a.id === active.id) ||
+      customAnswers.find((a) => a.id === active.id) ||
+      selectedAnswers.find((a) => a.id === active.id);
+
     if (!draggedItem) return;
 
-    const source = selectedAnswers.find((a) => a.id === active.id) ? "selected" : "other";
+    const sourceInSelected = selectedAnswers.find((a) => a.id === active.id) !== undefined;
     const destination = over.id;
 
-    if (source === "other" && destination === "selected") {
+    if (!sourceInSelected && destination === "selected") {
+      // Move from positive/negative/neutral/custom to selected
       removeFromAll(active.id);
       setSelectedAnswers((prev) => [...prev, draggedItem]);
-    } else if (source === "selected") {
+    } else if (sourceInSelected && destination !== "selected") {
+      // Move from selected back to original category
       setSelectedAnswers((prev) => prev.filter((a) => a.id !== active.id));
-      if (draggedItem.type === "positive") setPositiveAnswers((prev) => [...prev, draggedItem].sort((a, b) => a.label.localeCompare(b.label)));
-      else if (draggedItem.type === "negative") setNegativeAnswers((prev) => [...prev, draggedItem].sort((a, b) => a.label.localeCompare(b.label)));
-      else if (draggedItem.type === "neutral") setNeutralAnswers((prev) => [...prev, draggedItem].sort((a, b) => a.label.localeCompare(b.label)));
+      if (draggedItem.type === "positive")
+        setPositiveAnswers((prev) => [...prev, draggedItem].sort((a, b) => a.label.localeCompare(b.label)));
+      else if (draggedItem.type === "negative")
+        setNegativeAnswers((prev) => [...prev, draggedItem].sort((a, b) => a.label.localeCompare(b.label)));
+      else if (draggedItem.type === "neutral")
+        setNeutralAnswers((prev) => [...prev, draggedItem].sort((a, b) => a.label.localeCompare(b.label)));
       else setCustomAnswers((prev) => [...prev, draggedItem].sort((a, b) => a.label.localeCompare(b.label)));
     }
   };
 
   const handleAddCustom = () => {
     if (newCustom.trim() === "") return;
-    const newEntry = { id: uuidv4(), label: newCustom, type: "custom" };
+    // Prevent duplicates
+    const allLabels = [
+      ...positiveAnswers,
+      ...negativeAnswers,
+      ...neutralAnswers,
+      ...customAnswers,
+      ...selectedAnswers,
+    ].map((a) => a.label.toLowerCase());
+
+    if (allLabels.includes(newCustom.trim().toLowerCase())) {
+      alert("This answer already exists.");
+      return;
+    }
+
+    const newEntry = { id: uuidv4(), label: newCustom.trim(), type: "custom" };
     setCustomAnswers((prev) => [...prev, newEntry].sort((a, b) => a.label.localeCompare(b.label)));
     setNewCustom("");
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-    const updatedVotes = JSON.parse(localStorage.getItem("votes")) || [];
-    const newVotes = updatedVotes.map((vote) =>
-      vote.id === data.id
-        ? {
-            ...vote,
-            question,
-            description,
-            hidden,
-            expireDate,
-            answerType: selectedAnswers.map((a) => a.label),
-            createdAt: data.createdAt,
-            createdBy: data.createdBy,
-          }
-        : vote
-    );
-    localStorage.setItem("votes", JSON.stringify(newVotes));
-    setAllVotes(newVotes);
+    if (!question.trim()) {
+      alert("Question cannot be empty.");
+      return;
+    }
+    if (selectedAnswers.length === 0) {
+      alert("Select at least one answer.");
+      return;
+    }
+
+    const votes = JSON.parse(localStorage.getItem("votes")) || [];
+
+    if (isEditing) {
+      // Update existing question
+      const updatedVotes = votes.map((vote) =>
+        vote.id === data.id
+          ? {
+              ...vote,
+              question,
+              description,
+              hidden,
+              expireDate,
+              answerType: selectedAnswers.map((a) => a.label),
+              createdAt: data.createdAt,
+              createdBy: data.createdBy,
+            }
+          : vote
+      );
+      localStorage.setItem("votes", JSON.stringify(updatedVotes));
+      setAllVotes(updatedVotes);
+    } else {
+      // Add new question
+      const newQuestion = {
+        id: uuidv4(),
+        question,
+        description,
+        hidden,
+        expireDate,
+        answerType: selectedAnswers.map((a) => a.label),
+        createdAt: new Date().toISOString(),
+        createdBy: "Admin", // Or dynamic user info if you have it
+      };
+      const newVotes = [...votes, newQuestion];
+      localStorage.setItem("votes", JSON.stringify(newVotes));
+      setAllVotes(newVotes);
+
+      // Reset form after adding
+      setQuestion("");
+      setDescription("");
+      setHidden(false);
+      setExpireDate("");
+      setSelectedAnswers([]);
+      setCustomAnswers([]);
+    }
+
+    // Redirect back to questions list or stay
     navigate("/admin/questions");
   };
 
   const handleEditClick = (vote) => {
-    navigate("/admin/question-edit", { state: vote });
+    navigate("/admin/questions/edit", { state: vote });
   };
 
   return (
     <div className="container py-3">
       <div className="card shadow-sm p-4 my-4">
-        <h4 className="card-title mb-3">Edit Question</h4>
+        <h4 className="card-title mb-3">{isEditing ? "Edit Question" : "Add Question"}</h4>
         <form onSubmit={handleSave}>
           <div className="form-floating mb-2">
             <input
@@ -204,6 +268,7 @@ const QuestionEdit = () => {
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="Question"
+              required
             />
             <label>Question</label>
           </div>
@@ -214,6 +279,7 @@ const QuestionEdit = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Description"
+              style={{ height: "80px" }}
             />
             <label>Description</label>
           </div>
@@ -226,7 +292,9 @@ const QuestionEdit = () => {
               onChange={() => setHidden(!hidden)}
               id="hidden"
             />
-            <label className="form-check-label" htmlFor="hidden">Hidden</label>
+            <label className="form-check-label" htmlFor="hidden">
+              Hidden
+            </label>
           </div>
 
           <div className="mb-3">
@@ -242,107 +310,130 @@ const QuestionEdit = () => {
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <div className="row g-4">
               <DroppableColumn id="positive" title="Positive" icon="bi-hand-thumbs-up">
-                {positiveAnswers.sort((a, b) => a.label.localeCompare(b.label)).map((a) => (
-                  <DraggableAnswer key={a.id} id={a.id} label={a.label} />
-                ))}
+                {positiveAnswers
+                  .sort((a, b) => a.label.localeCompare(b.label))
+                  .map((a) => (
+                    <DraggableAnswer key={a.id} id={a.id} label={a.label} />
+                  ))}
               </DroppableColumn>
 
               <DroppableColumn id="negative" title="Negative" icon="bi-hand-thumbs-down">
-                {negativeAnswers.sort((a, b) => a.label.localeCompare(b.label)).map((a) => (
-                  <DraggableAnswer key={a.id} id={a.id} label={a.label} />
-                ))}
+                {negativeAnswers
+                  .sort((a, b) => a.label.localeCompare(b.label))
+                  .map((a) => (
+                    <DraggableAnswer key={a.id} id={a.id} label={a.label} />
+                  ))}
               </DroppableColumn>
 
               <DroppableColumn id="neutral" title="Neutral" icon="bi-question-circle">
-                {neutralAnswers.sort((a, b) => a.label.localeCompare(b.label)).map((a) => (
-                  <DraggableAnswer key={a.id} id={a.id} label={a.label} />
-                ))}
+                {neutralAnswers
+                  .sort((a, b) => a.label.localeCompare(b.label))
+                  .map((a) => (
+                    <DraggableAnswer key={a.id} id={a.id} label={a.label} />
+                  ))}
               </DroppableColumn>
 
-              <DroppableColumn id="custom" title="Custom" icon="bi-pencil-square">
-                {customAnswers.sort((a, b) => a.label.localeCompare(b.label)).map((a) => (
-                  <DraggableAnswer key={a.id} id={a.id} label={a.label} isCustom onDelete={removeFromAll} />
-                ))}
+              <DroppableColumn id="custom" title="Custom" icon="bi-pencil" extraWide>
+                {customAnswers
+                  .sort((a, b) => a.label.localeCompare(b.label))
+                  .map((a) => (
+                    <DraggableAnswer
+                      key={a.id}
+                      id={a.id}
+                      label={a.label}
+                      onDelete={() => {
+                        removeFromAll(a.id);
+                      }}
+                      isCustom
+                    />
+                  ))}
                 <div className="input-group mt-2">
                   <input
                     type="text"
                     className="form-control"
+                    placeholder="Add custom answer"
                     value={newCustom}
                     onChange={(e) => setNewCustom(e.target.value)}
-                    placeholder="Add custom answer"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddCustom();
+                      }
+                    }}
                   />
-                  <button type="button" className="btn btn-outline-primary" onClick={handleAddCustom}>
+                  <button type="button" className="btn btn-primary" onClick={handleAddCustom}>
                     Add
                   </button>
                 </div>
               </DroppableColumn>
 
-              <DroppableColumn id="selected" title="Selected Answers" icon="bi-check-circle" doubleHeight extraWide>
-                {selectedAnswers.map((a) => (
-                  <DraggableAnswer
-                    key={a.id}
-                    id={a.id}
-                    label={a.label}
-                    isCustom={a.type === "custom"}
-                    onDelete={removeFromAll}
-                  />
-                ))}
+              <DroppableColumn id="selected" title="Selected Answers" icon="bi-check-circle" doubleHeight>
+                {selectedAnswers
+                  .sort((a, b) => a.label.localeCompare(b.label))
+                  .map((a) => (
+                    <DraggableAnswer key={a.id} id={a.id} label={a.label} />
+                  ))}
               </DroppableColumn>
             </div>
           </DndContext>
 
-          <div className="row mt-4">
-            <div className="col text-center">
-              <button type="submit" className="btn btn-success">Save Changes</button>
-            </div>
-          </div>
+          <button type="submit" className="btn btn-success mt-3">
+            {isEditing ? "Update Question" : "Save Question"}
+          </button>
         </form>
       </div>
 
-      {/* Table below with all questions */}
-      <div className="card shadow-sm p-4 my-4">
-        <h4 className="card-title mb-3">All Questions</h4>
-        <div className="table-responsive">
-          <table className="table table-bordered table-hover align-middle">
-            <thead className="table-light">
+      <div className="card p-4 my-4">
+        <h5>All Questions</h5>
+        <table className="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Question</th>
+              <th>Description</th>
+              <th>Hidden</th>
+              <th>Expire Date</th>
+              <th>Answers</th>
+              <th>Created At</th>
+              <th>Created By</th>
+              <th>Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allVotes.length === 0 && (
               <tr>
-                <th>Question</th>
-                <th>Description</th>
-                <th>Hidden</th>
-                <th>Expire Date</th>
-                <th>Created At</th>
-                <th>Created By</th>
-                <th>Edit</th>
+                <td colSpan="9" className="text-center">
+                  No questions added yet.
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {allVotes.length === 0 ? (
-                <tr>
-                  <td colSpan="7" className="text-center text-muted">No questions found</td>
-                </tr>
-              ) : (
-                allVotes.map((vote) => (
-                  <tr key={vote.id}>
-                    <td>{vote.question}</td>
-                    <td>{vote.description}</td>
-                    <td>{vote.hidden ? "Yes" : "No"}</td>
-                    <td>{vote.expireDate || "-"}</td>
-                    <td>{vote.createdAt}</td>
-                    <td>{vote.createdBy}</td>
-                    <td>
-                      <button
-                        className="btn btn-sm btn-primary"
-                        onClick={() => handleEditClick(vote)}
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+            )}
+            {allVotes.map((vote) => (
+              <tr key={vote.id}>
+                <td>{vote.id}</td>
+                <td>{vote.question}</td>
+                <td>{vote.description}</td>
+                <td>{vote.hidden ? "Yes" : "No"}</td>
+                <td>{vote.expireDate}</td>
+                <td>
+                  {Array.isArray(vote.answerType)
+                    ? vote.answerType.join(", ")
+                    : String(vote.answerType) || "-"}
+                </td>
+                <td>{vote.createdAt ? new Date(vote.createdAt).toLocaleString() : "-"}</td>
+                <td>{vote.createdBy || "-"}</td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={() => handleEditClick(vote)}
+                    aria-label={`Edit question ${vote.question}`}
+                  >
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
