@@ -28,42 +28,50 @@ import QuestionEdit from './pages/admin/QuestionEdit.jsx';
 import AnswerOptions from './pages/admin/AnswerOptions.jsx';
 import VoteCodes from './pages/admin/VoteCodes.jsx';
 
+import ProtectedRoute from './components/ProtectedRoute.jsx'; // gdziekolwiek masz ten komponent
+
 const App = () => {
   return (
     <HashRouter>
       <Routes>
         {/* Publiczne layouty */}
-        Layout home
         <Route element={<LayoutHome />}>
-          <Route path="/" element={<Home />}/>
+          <Route path="/" element={<Home />} />
         </Route>
 
         <Route path="/user" element={<LayoutLogin />}>
           <Route path="/user/login" element={<Login />} />
-          <Route path="/user/register" element={<Register/>}/>
+          <Route path="/user/register" element={<Register />} />
           <Route path="/user/admin/register_to_tenant" element={<RegisterToTenant />} />
         </Route>
 
-{/* Layout 'głosowanie' */}
+        {/* Layout 'głosowanie' */}
         <Route element={<LayoutPoll />}>
           <Route path="/poll" element={<PollPage />} />
         </Route>
 
-        {/* Admin layout */}
-        <Route path="/admin" element={<LayoutAdmin />}>
+        {/* Admin layout zabezpieczony */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <LayoutAdmin />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<AdminHome />} />
-          <Route path="/admin/polls" element={<AdminPolls />} />
-          <Route path="/admin/questions" element={<AdminQuestion/>}/>
-          <Route path="/admin/account" element={<AdminAccount/>}/>
-          <Route path="/admin/tenant" element={<AdminTenant />}/>
-          <Route path="/admin/questions/edit" element={<QuestionEdit />}/>
-          <Route path="/admin/polls/vote_codes" element={<VoteCodes />}/>
-          <Route path="/admin/answer_options" element={<AnswerOptions />}/>
+          <Route path="polls" element={<AdminPolls />} />
+          <Route path="questions" element={<AdminQuestion />} />
+          <Route path="account" element={<AdminAccount />} />
+          <Route path="tenant" element={<AdminTenant />} />
+          <Route path="questions/edit" element={<QuestionEdit />} />
+          <Route path="polls/vote_codes" element={<VoteCodes />} />
+          <Route path="answer_options" element={<AnswerOptions />} />
         </Route>
-
       </Routes>
     </HashRouter>
   );
 };
 
 export default App;
+
