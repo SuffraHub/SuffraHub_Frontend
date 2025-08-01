@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Sidebar = () => {
   const [activePolls] = useState([
@@ -39,6 +40,21 @@ const Sidebar = () => {
       )}
     </ul>
   );
+
+  const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+   const handleLogout = () => {
+    axios.post('http://localhost:8000/logout', null, { withCredentials: true })
+  .then(res => {
+    setLoggedIn(false);
+    navigate('/');
+  })
+  .catch(err => {
+    console.error('Logout error:', err);
+  });
+
+  };
 
   return (
     <div className="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
@@ -167,10 +183,10 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center gap-2" to="/logout">
+              <button className="nav-link d-flex align-items-center gap-2" onClick={e => handleLogout()}>
                 <i className="bi bi-door-closed text-black"></i>
                 Log out
-              </Link>
+              </button>
             </li>
           </ul>
         </div>
