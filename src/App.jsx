@@ -11,19 +11,19 @@ import LayoutHome from './layouts/LayoutHome.jsx';
 import Home from './pages/Home.jsx';
 
 // Strony logowania
-import Login from './pages/Login.jsx';
-import Register from './pages/Register.jsx';
-import RegisterToTenant from './pages/RegisterToTenant.jsx';
+import Login from './pages/user/Login.jsx';
+import Register from './pages/user/Register.jsx';
+import RegisterToTenant from './pages/user/RegisterToTenant.jsx';
 
 // Strony polls - z panelem bocznym z listą pytań
 import PollPage from './pages/Poll.jsx';
 
 // Dashboard
-import AdminAccount from './pages/admin/AdminAccount.jsx';
-import AdminHome from './pages/admin/AdminHome.jsx';
-import AdminPolls from './pages/admin/AdminPolls.jsx';
-import AdminQuestion from './pages/admin/AdminQuestions.jsx';
-import AdminTenant from './pages/admin/AdminTenant.jsx';
+import AdminAccount from './pages/admin/Account.jsx';
+import AdminHome from './pages/admin/Home.jsx';
+import AdminPolls from './pages/admin/Polls.jsx';
+import AdminQuestion from './pages/admin/Questions.jsx';
+import AdminTenant from './pages/admin/Tenant.jsx';
 import QuestionEdit from './pages/admin/QuestionEdit.jsx';
 import AnswerOptions from './pages/admin/AnswerOptions.jsx';
 import VoteCodes from './pages/admin/VoteCodes.jsx';
