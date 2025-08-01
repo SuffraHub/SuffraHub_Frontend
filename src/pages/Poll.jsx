@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function PollPage() {
   useEffect(() => {
     document.title = 'Poll <name> | SuffraHub';
   }, []);
+    const [selectedOption, setSelectedOption] = useState(null);
 
   const question_number = 5;
   const pages = ['<-', question_number , '->'];
@@ -30,55 +31,52 @@ function PollPage() {
   </div>
 </h1>
 
-<form>
-  <div className="form-check mb-3 d-flex align-items-center gap-3">
-    <input
-      className="form-check-input"
-      type="radio"
-      name="exampleRadios"
-      id="exampleRadios1"
-      value="option1"
-    />
-    <label
-      className="form-check-label border rounded p-2 px-4 bg-success text-white mb-0"
-      htmlFor="exampleRadios1"
-    >
-      Yes
-    </label>
-  </div>
+    <form>
+      {["option1", "option2", "option3"].map((option, i) => {
+        const labels = { option1: "Yes", option2: "No", option3: "Hold" };
+        const bg = {
+          option1: "bg-success text-white",
+          option2: "bg-danger text-white",
+          option3: "",
+        };
+        return (
+          <div
+            className="form-check mb-3 d-flex align-items-center gap-3"
+            key={option}
+          >
+            <input
+              className="form-check-input"
+              type="radio"
+              name="exampleRadios"
+              id={`exampleRadios${i + 1}`}
+              value={option}
+              checked={selectedOption === option}
+              onChange={() => setSelectedOption(option)}
+            />
+            <label
+              className={`form-check-label border rounded p-2 px-4 mb-0 ${bg[option]}`}
+              htmlFor={`exampleRadios${i + 1}`}
+            >
+              {labels[option]}
+            </label>
+          </div>
+        );
+      })}
 
-  <div className="form-check mb-3 d-flex align-items-center gap-3">
-    <input
-      className="form-check-input"
-      type="radio"
-      name="exampleRadios"
-      id="exampleRadios2"
-      value="option2"
-    />
-    <label
-      className="form-check-label border rounded p-2 px-4 bg-danger text-white mb-0"
-      htmlFor="exampleRadios2"
-    >
-      No
-    </label>
-  </div>
+<div className="mt-3 text-start">
+  <a
+    href="#"
+    className="text-primary text-decoration-underline d-inline-block"
+    onClick={(e) => {
+      e.preventDefault();
+      setSelectedOption(null);
+    }}
+  >
+    Wyczyść wybór
+  </a>
+</div>
 
-  <div className="form-check d-flex align-items-center gap-3">
-    <input
-      className="form-check-input"
-      type="radio"
-      name="exampleRadios"
-      id="exampleRadios3"
-      value="option3"
-    />
-    <label
-      className="form-check-label border rounded p-2 px-4 mb-0"
-      htmlFor="exampleRadios3"
-    >
-      Hold
-    </label>
-  </div>
-</form>
+    </form>
 
 
         

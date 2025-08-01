@@ -71,7 +71,7 @@ const Sidebar = () => {
             </li>
             <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/admin/answer_options">
-                <i className="bi bi-database text-black"></i>
+                <i className="bi bi-alt text-black"></i>
                 Answer variants
               </Link>
             </li>
