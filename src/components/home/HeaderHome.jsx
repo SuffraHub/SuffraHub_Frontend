@@ -19,7 +19,7 @@ const HeaderHome = () => {
           </button>
           <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li>
-              <Link to="/user/gologin" className="dropdown-item text-success fw-bold">
+              <Link to="/user/login" className="dropdown-item text-success fw-bold">
                 <i className="bi bi-door-open"></i> Login
               </Link>
             </li>

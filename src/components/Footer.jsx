@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
@@ -29,11 +30,12 @@ const Footer = ({ toastMessages = [] }) => {
               <a
                 href="/"
                 className="d-flex align-items-center justify-content-center link-body-emphasis text-decoration-none mb-1"
-                aria-label="Bootstrap"
+                aria-label="SuffraHub | Home"
               >
                 <i className="bi bi-check2-square" style={{ fontSize: '2rem', color: 'blue' }}></i>
               </a>
               <p className="fw-bold mb-0">SuffraHub v.0.1</p>
+              <p>(<Link to="https://github.com/SuffraHub/SuffraHub_Frontend/releases">changelog</Link>)</p>
             </div>
 
             {/* Prawa kolumna */}
