@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import axios from 'axios'
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const activePoll = {
     id: 1,
     name: 'Głosowanie: Budżet 2025',
@@ -15,13 +16,19 @@ const Sidebar = () => {
     ]
   };
 
+    const [pollData, setPollData] = useState([]);
+
+    axios.get('http://localhost:8001/poll-by-id/'+props.data.pollId)
+    .then(response => setPollData(response.data.pollData));
+
+
   return (
     <>
 <div className="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary" style={{ height: '90vh' }}>
       <div className="bg-body-tertiary" tabIndex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
         
           <h5 className="bg-dark text-light p-2">
-            <b>{activePoll.name}</b>
+            <b>{pollData.name}</b>
           </h5>
         </div>
 

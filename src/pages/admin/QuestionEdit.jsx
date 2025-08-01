@@ -45,16 +45,19 @@ const QuestionEdit = () => {
                 type="text"
                 className="form-control"
                 id="question_name"
+                name="new_question"
+                placeholder="Pytanie"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
               />
               <label htmlFor="question_name">Question</label>
             </div>
-
             <div className="form-floating mb-3">
               <textarea
                 className="form-control"
+                placeholder="Opis"
                 id="question_description"
+                name="new_question_description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
@@ -73,6 +76,7 @@ const QuestionEdit = () => {
                 Hidden
               </label>
             </div>
+
 
             <div className="mb-3">
               <label htmlFor="expire_date" className="form-label">

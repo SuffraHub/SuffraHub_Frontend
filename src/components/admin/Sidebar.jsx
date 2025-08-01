@@ -45,7 +45,7 @@ const Sidebar = () => {
       <div className="offcanvas-md offcanvas-end bg-body-tertiary" tabIndex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
         <div className="offcanvas-header">
           <h5 className="offcanvas-title text-white" id="sidebarMenuLabel">
-            Tenant:<br /> <b>Firm ABC</b>
+            Tenant:<br /> <b>ABC</b>
           </h5>
           <button type="button" className="btn-close text-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
         </div>
@@ -64,19 +64,25 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center gap-2" to="/questions">
+              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/questions">
                 <i className="bi bi-database text-black"></i>
                 Questions
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center gap-2" to="/tenant">
+              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/answer_options">
+                <i className="bi bi-database text-black"></i>
+                Answer variants
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/tenant">
                 <i className="bi bi-people text-black"></i>
                 Tenant
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center gap-2" to="/reports">
+              <Link className="nav-link d-flex align-items-center gap-2 disabled" to="/admin/reports">
                 <i className="bi bi-graph-up text-black"></i>
                 Reports
               </Link>
@@ -85,7 +91,7 @@ const Sidebar = () => {
 
           <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
             <span>My polls</span>
-            <Link className="link-secondary" to="/polls/new" aria-label="Add a new poll">
+            <Link className="link-secondary" to="/admin/polls" aria-label="Add a new poll">
               <i className="bi bi-plus-circle text-black"></i>
             </Link>
           </h6>
@@ -155,7 +161,7 @@ const Sidebar = () => {
           <hr className="my-3" />
           <ul className="nav flex-column mb-auto">
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center gap-2" to="/account">
+              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/account">
                 <i className="bi bi-gear-wide-connected text-black"></i>
                 Settings
               </Link>

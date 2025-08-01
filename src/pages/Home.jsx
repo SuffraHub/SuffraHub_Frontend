@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 function Home() {
   const [voteToken, setVoteToken] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
   const [publicVotes, setPublicVotes] = useState([]);
+  const [pollId, setPollId] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = 'Vote | SuffraHub';
@@ -43,24 +47,32 @@ function Home() {
 
     const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
 
-    const res = await fetch('/api/verify-vote-token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        vote_token: voteToken,
-        cf_turnstile_response: turnstileToken,
-      }),
-    });
+    console.log(voteToken);
+    await axios.get('http://localhost:8001/poll-by-code/' + voteToken)
+      .then(response => {
+        const pollId = response.data.poll_id;
 
-    const data = await res.json();
-    if (data.success) {
-      setStatusMessage('✅ Token accepted. Redirecting...');
-      setTimeout(() => {
-        window.location.href = '/vote.php'; // lub zmień na React route
-      }, 1000);
-    } else {
-      setStatusMessage(`❌ ${data.message || 'Invalid token or verification failed.'}`);
-    }
+        if (pollId) {
+          setPollId(pollId); // save poll ID if needed later
+          setStatusMessage('✅ Token accepted. Redirecting...');
+          setTimeout(() => {
+            navigate('/poll', {
+              state: {
+                pollId: pollId
+              }
+            });
+          }, 1000);
+        } else {
+          setStatusMessage('❌ Invalid token or poll not found.');
+        }
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 404) {
+          setStatusMessage('❌ Invalid token or poll not found.');
+        } else {
+          setStatusMessage('❌ An error occurred while verifying the token.');
+        }
+      });
   };
 
   return (
@@ -147,7 +159,7 @@ function Home() {
         </div>
       </main>
 
-      <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+      {/* <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script> */}
     </>
   );
 }

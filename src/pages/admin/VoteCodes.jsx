@@ -9,7 +9,7 @@ const VoteCodes = () => {
             <div className="card shadow-sm p-4 my-4">
         <h5 className="card-title mb-3">Poll codes generating</h5>
         <form
-          action="/generate_codes.php" // Placeholder, backend nieobsługiwany
+          action="/generate_codes" // Placeholder, backend nieobsługiwany
           method="post"
           target="pdfFrame"
         >

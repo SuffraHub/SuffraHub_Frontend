@@ -124,7 +124,7 @@ function Register() {
             {message && <div className="fw-bold mt-4 text-danger">{message}</div>}
 
             <span className="pt-2 d-block">
-                Already have an account? <Link to="/login">Log in!</Link>
+                Already have an account? <Link to="/user/login">Log in!</Link>
             </span>
         </main>
     )
