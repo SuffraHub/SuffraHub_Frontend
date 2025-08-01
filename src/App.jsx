@@ -11,21 +11,22 @@ import LayoutHome from './layouts/LayoutHome.jsx';
 import Home from './pages/Home.jsx';
 
 // Strony logowania
-import Login from './pages/Login.jsx';
-import Register from './pages/Register.jsx';
-import RegisterToTenant from './pages/RegisterToTenant.jsx';
+import Login from './pages/user/Login.jsx';
+import Register from './pages/user/Register.jsx';
+import RegisterToTenant from './pages/user/RegisterToTenant.jsx';
 
 // Strony polls - z panelem bocznym z listą pytań
 import PollPage from './pages/Poll.jsx';
 
 // Dashboard
-import AdminHome from './pages/AdminHome.jsx';
-import AdminPolls from './pages/AdminPolls.jsx';
-import AdminQuestion from './pages/AdminQuestions.jsx';
-import AdminAccount from './pages/AdminAccount.jsx';
-import AdminTenant from './pages/AdminTenant.jsx';
-import QuestionEdit from './pages/QuestionEdit.jsx';
-import VoteCodes from './pages/VoteCodes.jsx';
+import AdminAccount from './pages/admin/Account.jsx';
+import AdminHome from './pages/admin/Home.jsx';
+import AdminPolls from './pages/admin/Polls.jsx';
+import AdminQuestion from './pages/admin/Questions.jsx';
+import AdminTenant from './pages/admin/Tenant.jsx';
+import QuestionEdit from './pages/admin/QuestionEdit.jsx';
+import AnswerOptions from './pages/admin/AnswerOptions.jsx';
+import VoteCodes from './pages/admin/VoteCodes.jsx';
 
 const App = () => {
   return (
@@ -57,6 +58,7 @@ const App = () => {
           <Route path="/admin/tenant" element={<AdminTenant />}/>
           <Route path="/admin/questions/edit" element={<QuestionEdit />}/>
           <Route path="/admin/polls/vote_codes" element={<VoteCodes />}/>
+          <Route path="/admin/answer_options" element={<AnswerOptions />}/>
         </Route>
 
       </Routes>

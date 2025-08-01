@@ -70,6 +70,12 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
+              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/answer_options">
+                <i className="bi bi-database text-black"></i>
+                Answer variants
+              </Link>
+            </li>
+            <li className="nav-item">
               <Link className="nav-link d-flex align-items-center gap-2" to="/admin/tenant">
                 <i className="bi bi-people text-black"></i>
                 Tenant
