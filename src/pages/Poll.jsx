@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Question from '../components/poll/Question';
 
 function PollPage() {
   useEffect(() => {
     document.title = 'Poll <name> | SuffraHub';
   }, []);
-    const [selectedOption, setSelectedOption] = useState(null);
 
   const question_number = 5;
   const pages = ['<-', question_number , '->'];
@@ -20,7 +20,7 @@ function PollPage() {
       <div className="row">
         <div class="container my-5">
 			<div class="p-5 text-center bg-body-tertiary rounded-3">
-        <div className="progress">
+        {/* <div className="progress">
   <div className="progress-bar progress-bar-striped" role="progressbar" style={{width: '71%'}} aria-valuenow="5" aria-valuemin="1" aria-valuemax="7">71%</div>
 </div>
 				<h1 className="text-body-emphasis text-start mt-3 h1">
@@ -76,7 +76,9 @@ function PollPage() {
   </a>
 </div>
 
-    </form>
+    </form> */}
+
+    <Question id="1"></Question>
 
 
         

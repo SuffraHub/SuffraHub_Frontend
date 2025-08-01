@@ -18,7 +18,7 @@ const Sidebar = (props) => {
 
     const [pollData, setPollData] = useState([]);
 
-    axios.get('http://localhost:8001/poll-by-id/'+props.data.pollId)
+    axios.get('http://localhost:8005/poll-by-id/'+props.data.pollId)
     .then(response => setPollData(response.data.pollData));
 
 

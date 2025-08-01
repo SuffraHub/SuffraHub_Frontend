@@ -31,12 +31,9 @@ function Login() {
         password: formData.password
       })
         .then((res) => {
-          if (res.data.success) {
+          console.log(res.data);
             navigate('/admin');
-          } else {
-            setMessage(res.data.message || "Login failed.");
-          }
-        })
+          })
         .catch((err) => {
           setMessage(err.response?.data?.message || "An error occurred while logging in.");
         });
