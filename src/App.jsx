@@ -19,13 +19,14 @@ import RegisterToTenant from './pages/RegisterToTenant.jsx';
 import PollPage from './pages/Poll.jsx';
 
 // Dashboard
-import AdminHome from './pages/AdminHome.jsx';
-import AdminPolls from './pages/AdminPolls.jsx';
-import AdminQuestion from './pages/AdminQuestions.jsx';
-import AdminAccount from './pages/AdminAccount.jsx';
-import AdminTenant from './pages/AdminTenant.jsx';
-import QuestionEdit from './pages/QuestionEdit.jsx';
-import VoteCodes from './pages/VoteCodes.jsx';
+import AdminAccount from './pages/admin/AdminAccount.jsx';
+import AdminHome from './pages/admin/AdminHome.jsx';
+import AdminPolls from './pages/admin/AdminPolls.jsx';
+import AdminQuestion from './pages/admin/AdminQuestions.jsx';
+import AdminTenant from './pages/admin/AdminTenant.jsx';
+import QuestionEdit from './pages/admin/QuestionEdit.jsx';
+import AnswerOptions from './pages/admin/AnswerOptions.jsx';
+import VoteCodes from './pages/admin/VoteCodes.jsx';
 
 const App = () => {
   return (
@@ -57,6 +58,7 @@ const App = () => {
           <Route path="/admin/tenant" element={<AdminTenant />}/>
           <Route path="/admin/questions/edit" element={<QuestionEdit />}/>
           <Route path="/admin/polls/vote_codes" element={<VoteCodes />}/>
+          <Route path="/admin/answer_options" element={<AnswerOptions />}/>
         </Route>
 
       </Routes>
