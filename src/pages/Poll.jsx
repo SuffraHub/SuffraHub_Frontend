@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import Question from '../components/poll/Question';
+import axios from 'axios';
 
-function PollPage() {
+function PollPage(props) {
   useEffect(() => {
     document.title = 'Poll <name> | SuffraHub';
   }, []);
@@ -10,6 +11,12 @@ function PollPage() {
   const question_number = 5;
   const pages = ['<-', question_number , '->'];
   const currentPage = question_number;
+
+  const { pollData, selectedQuestion } = useOutletContext();
+
+  if (!selectedQuestion) {
+    return <p>Wybierz pytanie z panelu bocznego.</p>;
+  }
 
   return (
     <>
@@ -20,65 +27,9 @@ function PollPage() {
       <div className="row">
         <div class="container my-5">
 			<div class="p-5 text-center bg-body-tertiary rounded-3">
-        {/* <div className="progress">
-  <div className="progress-bar progress-bar-striped" role="progressbar" style={{width: '71%'}} aria-valuenow="5" aria-valuemin="1" aria-valuemax="7">71%</div>
-</div>
-				<h1 className="text-body-emphasis text-start mt-3 h1">
-  <div className="d-flex align-items-center">
-    <span className="text-secondary">#</span>
-    <b>5</b>
-    <span className="h3 ms-3 mb-0">What do you think about some changes in project?</span>
-  </div>
-</h1>
 
-    <form>
-      {["option1", "option2", "option3"].map((option, i) => {
-        const labels = { option1: "Yes", option2: "No", option3: "Hold" };
-        const bg = {
-          option1: "bg-success text-white",
-          option2: "bg-danger text-white",
-          option3: "",
-        };
-        return (
-          <div
-            className="form-check mb-3 d-flex align-items-center gap-3"
-            key={option}
-          >
-            <input
-              className="form-check-input"
-              type="radio"
-              name="exampleRadios"
-              id={`exampleRadios${i + 1}`}
-              value={option}
-              checked={selectedOption === option}
-              onChange={() => setSelectedOption(option)}
-            />
-            <label
-              className={`form-check-label border rounded p-2 px-4 mb-0 ${bg[option]}`}
-              htmlFor={`exampleRadios${i + 1}`}
-            >
-              {labels[option]}
-            </label>
-          </div>
-        );
-      })}
 
-<div className="mt-3 text-start">
-  <a
-    href="#"
-    className="text-primary text-decoration-underline d-inline-block"
-    onClick={(e) => {
-      e.preventDefault();
-      setSelectedOption(null);
-    }}
-  >
-    Wyczyść wybór
-  </a>
-</div>
-
-    </form> */}
-
-    <Question id="1"></Question>
+    <Question data={selectedQuestion}></Question>
 
 
         

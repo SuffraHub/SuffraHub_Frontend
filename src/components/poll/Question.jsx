@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
 
 function Question(props) {
@@ -6,11 +6,12 @@ function Question(props) {
     const [question, setQuestion] = useState([]);
     const [options, setOptions] = useState([]);
 
-    axios.get('http://localhost:8003/getQuestion/' + props.id)
-    .then(res => setQuestion(res.data.questionData));
+    // axios.get('http://localhost:8003/getQuestion/' + props.selectedQuestion)
+    // .then(res => setQuestion(res.data.questionData));
 
-    axios.get('http://localhost:8003/getOptions/' + props.id)
-    .then(res => setOptions(res.data.options));
+    // axios.get('http://localhost:8003/getOptions/' + props.data.question_id)
+    // .then(res => setOptions(res.data.options));
+
 
     return (
         <>
@@ -21,12 +22,12 @@ function Question(props) {
                 <div className="d-flex align-items-center">
                     <span className="text-secondary">#</span>
                     <b>5</b>
-                    <span className="h3 ms-3 mb-0">{question.question}</span>
+                    <span className="h3 ms-3 mb-0">{props.data.question}</span>
                 </div>
             </h1>
 
             <form>
-                {options.map((option, i) => {
+                {props.data.options.map((option, i) => {
                     const bg = ["bg-success text-white","bg-danger text-white",""];
                     return (
                         <div
