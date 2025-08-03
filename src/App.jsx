@@ -17,6 +17,7 @@ import RegisterToTenant from './pages/user/RegisterToTenant.jsx';
 
 // Strony polls - z panelem bocznym z listą pytań
 import PollPage from './pages/Poll.jsx';
+import PollSummary from './pages/PollSummary.jsx';
 
 // Dashboard
 import AdminAccount from './pages/admin/Account.jsx';
@@ -37,6 +38,7 @@ const App = () => {
         {/* Publiczne layouty */}
         <Route element={<LayoutHome />}>
           <Route path="/" element={<Home />} />
+          <Route path="/poll/summary" element={<PollSummary />} />
         </Route>
 
         <Route path="/user" element={<LayoutLogin />}>
@@ -48,6 +50,7 @@ const App = () => {
         {/* Layout 'głosowanie' */}
         <Route element={<LayoutPoll />}>
           <Route path="/poll" element={<PollPage />} />
+          
         </Route>
 
         {/* Admin layout zabezpieczony */}
