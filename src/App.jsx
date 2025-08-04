@@ -96,7 +96,7 @@ const App = () => {
             }
           />
           <Route
-            path="polls/edit"
+            path="polls/edit/:pollId"
             element={
               <ProtectedRoute allowedPermissions={[2, 3, 4, 5, 6]}>
                 <PollEdit />

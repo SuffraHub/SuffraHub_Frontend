@@ -62,7 +62,7 @@ const Sidebar = () => {
         polls.map(poll => (
           <li key={poll.id}>
             <Link
-              to={`/poll/${poll.id}`}
+              to={`/admin/polls/edit/${poll.id}`}
               className="btn btn-link p-0 text-start"
               style={{ textDecoration: 'none' }}
             >

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
   DndContext,
@@ -10,60 +10,123 @@ import {
   useDraggable,
   useDroppable,
 } from "@dnd-kit/core";
-import { v4 as uuidv4 } from "uuid";
 
 function EditPoll() {
-  const location = useLocation();
+  const { pollId } = useParams();
   const navigate = useNavigate();
-  const poll = location.state;
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [validTo, setValidTo] = useState("");
   const [availableQuestions, setAvailableQuestions] = useState([]);
   const [assignedQuestions, setAssignedQuestions] = useState([]);
+  const [initialAssignedQuestions, setInitialAssignedQuestions] = useState([]);
+
 
   const sensors = useSensors(useSensor(PointerSensor));
 
-  useEffect(() => {
-    if (!poll) {
-      navigate("/admin/polls");
-      return;
-    }
-
-    setName(poll.name || "");
-    setDescription(poll.description || "");
-    setValidTo(poll.validTo || "");
-
-    // Dummy available questions (should be replaced by real data from API)
-    const dummy = [
-      { id: "q1", label: "Czy popierasz projekt A?" },
-      { id: "q2", label: "Czy zgadzasz się z punktem B?" },
-      { id: "q3", label: "Twoja opinia na temat C?" },
-    ];
-    setAvailableQuestions(dummy);
-    setAssignedQuestions(poll.questions || []); // zakładamy, że są w poll.questions
-  }, [poll, navigate]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const updatedPoll = {
-      id: poll.id,
-      name: name.trim(),
-      description: description.trim(),
-      validTo,
-      questions: assignedQuestions.map((q) => q.id),
-    };
-
+useEffect(() => {
+  const fetchData = async () => {
     try {
-      await axios.put("http://localhost:8005/update-poll", updatedPoll);
-      navigate("/admin/polls");
+      const pollRes = await axios.get(`http://localhost:8005/poll-by-id/${pollId}`);
+      const poll = pollRes.data.pollData;
+      console.log(poll);
+      const companyId = pollRes.data.pollData.company_id;
+
+      setName(poll.name || "");
+      setDescription(poll.description || "");
+      setValidTo(poll.valid_to || "");
+
+      // Fetch assigned questions
+      const assignedRes = await axios.get(`http://localhost:8003/getAllQuestions/${pollId}`);
+      const assigned = (assignedRes.data.questions || []).map((q) => ({
+        id: q.question_id.toString(),
+        label: q.question,
+      }));
+      setAssignedQuestions(assigned);
+      setInitialAssignedQuestions(assigned);
+
+      // Fetch tenant questions (e.g. for company_id = 1)
+      const tenantRes = await axios.get(`http://localhost:8003/getTenantQuestions/${companyId}`);
+      const allQuestions = (tenantRes.data.questions || []).map((q) => ({
+        id: q.question_id.toString(),
+        label: q.question,
+      }));
+
+      // Exclude already assigned
+      const assignedIds = new Set(assigned.map((q) => q.id));
+      const available = allQuestions.filter((q) => !assignedIds.has(q.id));
+      setAvailableQuestions(available);
+
     } catch (err) {
-      console.error("Błąd aktualizacji głosowania:", err);
-      alert("Wystąpił błąd przy zapisie.");
+      console.error(err);
+      alert("Nie udało się załadować danych.");
+      navigate("/admin/polls");
     }
   };
+
+  fetchData();
+}, [pollId, navigate]);
+
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const updatedPoll = {
+    pollId: parseInt(pollId),
+    name: name.trim(),
+    description: description.trim(),
+    valid_to: validTo,
+    is_active: 1,
+  };
+
+  try {
+    // 1. Zapisz zmiany w poll
+    await axios.post("http://localhost:8005/editPoll", updatedPoll);
+
+    // 2. Znajdź pytania do przypisania z aktualnej listy assignedQuestions
+    const questionsToAssign = assignedQuestions.map((q, idx) => ({
+      question_id: parseInt(q.id),
+      sort_order: idx,
+    }));
+
+    // 3. Znajdź pytania do usunięcia (te, które były na starcie, a teraz ich nie ma)
+    const initialIds = initialAssignedQuestions.map(q => q.id);
+    const currentIds = assignedQuestions.map(q => q.id);
+    const questionsToRemove = initialIds
+      .filter(id => !currentIds.includes(id))
+      .map(id => parseInt(id));
+
+    // 4. Usuń pytania, które zostały wyrzucone z assignedQuestions
+    await Promise.all(
+      questionsToRemove.map((questionId) =>
+        axios.delete("http://localhost:8003/unassignQuestionFromPoll", {
+          data: { pollId: parseInt(pollId), questionId },
+        })
+      )
+    );
+
+    // 5. Przypisz aktualne pytania (dodaj lub aktualizuj kolejność)
+    if (questionsToAssign.length > 0) {
+      await axios.post("http://localhost:8003/assignQuestionsToPoll", {
+        pollId: parseInt(pollId),
+        questions: questionsToAssign,
+      });
+    }
+
+    // 6. Zaktualizuj initialAssignedQuestions, żeby stan był zsynchronizowany
+    setInitialAssignedQuestions(assignedQuestions);
+
+    // 7. Przejdź do listy ankiet
+    navigate("/admin/polls");
+  } catch (err) {
+    console.error("Błąd zapisu:", err);
+    alert("Błąd podczas zapisu ankiety.");
+  }
+};
+
+
 
   const handleDragEnd = ({ active, over }) => {
     if (!over) return;
@@ -92,7 +155,6 @@ function EditPoll() {
               type="text"
               className="form-control"
               id="edit_poll_name"
-              placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -103,7 +165,6 @@ function EditPoll() {
           <div className="form-floating mb-3">
             <textarea
               className="form-control"
-              placeholder="Description"
               id="edit_poll_description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -117,7 +178,6 @@ function EditPoll() {
               type="datetime-local"
               className="form-control"
               id="edit_poll_valid_to"
-              placeholder="Expiry date"
               value={validTo}
               onChange={(e) => setValidTo(e.target.value)}
               required
@@ -152,12 +212,12 @@ function EditPoll() {
         </form>
       </div>
 
-      <GenerateTokens pollId={poll?.id} />
+      <GenerateTokens pollId={pollId} />
     </div>
   );
 }
 
-// ============ Drag and Drop Helpers ============
+// Drag and drop components
 
 const DraggableQuestion = ({ id, label }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useDraggable({ id });
@@ -201,7 +261,9 @@ const DroppableBox = ({ id, title, children }) => {
   );
 };
 
-// ============ Tokens Section (unchanged) ============
+// GenerateTokens component: bez zmian
+
+// ... zostawiam bez zmian, bo jest poprawny
 
 function GenerateTokens({ pollId: initialPollId }) {
   const [pollId, setPollId] = useState(initialPollId || "");
