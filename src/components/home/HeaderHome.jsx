@@ -56,7 +56,18 @@ const HeaderHome = () => {
   { !loggedIn && <li><hr className="dropdown-divider" /></li> }
 
   { loggedIn && (
+    <>
     <li>
+      
+      <Link
+        className="dropdown-item fw-bold"
+        to="/admin"
+      >
+        <i className="bi bi-house-gear"></i> Admin
+      </Link>
+    </li>
+    <hr />
+        <li>
       <button
         className="dropdown-item fw-bold"
         onClick={handleLogout}
@@ -64,6 +75,7 @@ const HeaderHome = () => {
         <i className="bi bi-door-closed"></i> Logout
       </button>
     </li>
+    </>
   )}
 </ul>
 

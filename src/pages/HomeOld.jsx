@@ -57,7 +57,7 @@ function Home() {
     if (data.success) {
       setStatusMessage('✅ Token accepted. Redirecting...');
       setTimeout(() => {
-        window.location.href = '/vote.php'; // lub zmień na React route
+        window.location.href = '/vote'; // lub zmień na React route
       }, 1000);
     } else {
       setStatusMessage(`❌ ${data.message || 'Invalid token or verification failed.'}`);
