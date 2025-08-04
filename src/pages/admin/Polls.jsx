@@ -31,7 +31,7 @@ function AdminPolls() {
             if (!name) return alert("Poll name is required.");
 
             const newPoll = {
-              id: crypto.randomUUID(),
+              id: 6,
               name,
               description,
               validTo,
