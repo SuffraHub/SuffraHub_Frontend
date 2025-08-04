@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+// DODANO
 function PollSummary() {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
