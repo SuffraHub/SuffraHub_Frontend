@@ -25,8 +25,8 @@ function PollPage(props) {
       style={{ minHeight: '80vh' }}
     >
       <div className="row">
-        <div class="container my-5">
-			<div class="p-5 text-center bg-body-tertiary rounded-3">
+        <div className="container my-5">
+			<div className="p-5 text-center bg-body-tertiary rounded-3">
 
 
     <Question data={selectedQuestion}></Question>
