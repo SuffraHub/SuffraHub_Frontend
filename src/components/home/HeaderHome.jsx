@@ -1,12 +1,37 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import '../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const HeaderHome = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/user-info', { withCredentials: true })
+      .then(res => {
+        setLoggedIn(res.data.loggedIn);
+        console.log((res.data.loggedIn));
+      })
+      .catch(() => {
+        setLoggedIn(false);
+      });
+  }, []);
+
+  const handleLogout = () => {
+    axios.post('http://localhost:8000/logout', null, { withCredentials: true })
+  .then(res => {
+    setLoggedIn(false);
+  })
+  .catch(err => {
+    console.error('Logout error:', err);
+  });
+
+  };
+
   return (
     <nav className="navbar bg-body-tertiary border">
       <div className="container-fluid d-flex justify-content-between align-items-center">
 
-        {/* Dropdown menu po lewej */}
         <div className="dropdown">
           <button
             className="btn btn-primary dropdown-toggle"
@@ -18,17 +43,32 @@ const HeaderHome = () => {
             <i className="bi bi-list"></i>
           </button>
           <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li>
-              <Link to="/user/login" className="dropdown-item text-success fw-bold">
-                <i className="bi bi-door-open"></i> Login
-              </Link>
-            </li>
-            <li><hr className="dropdown-divider" /></li>
-            <li><button className="dropdown-item fw-bold" disabled><i className="bi bi-door-closed"></i> Logout</button></li>
-          </ul>
+  { !loggedIn && (
+    <li>
+      <Link
+        to="/user/login"
+        className="dropdown-item text-success fw-bold"
+      >
+        <i className="bi bi-door-open"></i> Login
+      </Link>
+    </li>
+  )}
+  { !loggedIn && <li><hr className="dropdown-divider" /></li> }
+
+  { loggedIn && (
+    <li>
+      <button
+        className="dropdown-item fw-bold"
+        onClick={handleLogout}
+      >
+        <i className="bi bi-door-closed"></i> Logout
+      </button>
+    </li>
+  )}
+</ul>
+
         </div>
 
-        {/* Wycentrowany brand */}
         <div className="d-flex align-items-center justify-content-center flex-grow-1">
           <Link className="navbar-brand text-center" to="/">
             <img
@@ -42,7 +82,6 @@ const HeaderHome = () => {
           </Link>
         </div>
 
-        {/* Toggle Dark Mode po prawej */}
         <div>
           <button className="btn btn-outline-secondary">
             <i className="bi bi-moon-stars-fill"></i>

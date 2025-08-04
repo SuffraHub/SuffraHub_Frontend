@@ -10,7 +10,7 @@ function Admin() {
   return (
     <>
     <h1>Welcome to AdminHome!</h1>
-    					<h1 class="text-warning fw-bold">Changes will appear here. See the sidebar.</h1>
+    					<h1 className="text-warning fw-bold">Changes will appear here. See the sidebar.</h1>
 
       {/* <div>
         <a href="https://vite.dev" target="_blank">
