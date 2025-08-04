@@ -40,9 +40,10 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/poll/summary" element={<PollSummary />} />
           <Route path="/user" element={<LayoutLogin />}>
-          <Route path="/user/login" element={<Login />} />
-          <Route path="/user/register" element={<Register />} />
-          <Route path="/user/admin/register_to_tenant" element={<RegisterToTenant />} />
+            <Route path="/user/login" element={<Login />} />
+            <Route path="/user/register" element={<Register />} />
+            <Route path="/user/admin/register_to_tenant" element={<RegisterToTenant />} />
+            </Route>
         </Route>
 
         {/* Layout 'głosowanie' */}
