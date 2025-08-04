@@ -1,14 +1,38 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
 
 const AdminHeader = () => {
-  const roleDescription = "Administrator"; // Placeholder
-  const companyName = "Firm XYZ";         // Placeholder
-
   const [theme, setTheme] = useState('light');
+  const [companyName, setCompanyName] = useState('Ładowanie...');
+  const roleDescription = "Administrator"; // Można też pobierać dynamicznie
 
   useEffect(() => {
     document.documentElement.setAttribute('data-bs-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    const fetchTenantName = async () => {
+      try {
+        const userRes = await axios.get('http://localhost:8000/user-info', { withCredentials: true });
+        const companyId = userRes.data.company_id;
+        if (!companyId) {
+          setCompanyName('Unassigned');
+          return;
+        }
+
+        const tenantRes = await axios.get(`http://localhost:8001/tenant-info/${companyId}`, { credentials: 'include' });
+        //if (!tenantRes.ok) throw new Error('Błąd pobierania tenant-info');
+
+        setCompanyName(tenantRes.data.companyInfo.name || 'Unknown');
+      } catch (error) {
+        console.error('Error:', error);
+        setCompanyName('Unknown error');
+      }
+    };
+
+    fetchTenantName();
+  }, []);
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
@@ -17,7 +41,7 @@ const AdminHeader = () => {
   return (
     <header className="navbar sticky-top bg-dark flex-md-nowrap p-1 shadow" data-bs-theme="dark">
       {/* Left: Tenant info */}
-      <a className="navbar-brand col-md-4 col-lg-2 me-0 px-3 fs-6 text-white text-wrap" href="/admin.php">
+      <a className="navbar-brand col-md-4 col-lg-2 me-0 px-3 fs-6 text-white text-wrap" href="/admin">
         Tenant:<br /> <b>{companyName}</b>
       </a>
 
