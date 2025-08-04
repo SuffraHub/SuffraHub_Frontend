@@ -49,7 +49,9 @@ function ProtectedRoute({ allowedPermissions = [], children }) {
       });
   }, [allowedPermissions]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="spinner-border" role="status">
+  <span className="visually-hidden">Loading...</span>
+</div>;
 
   if (!isAuthenticated) {
     console.warn('[ProtectedRoute] Użytkownik niezalogowany – przekierowanie na /user/login');
