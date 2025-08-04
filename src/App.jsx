@@ -16,6 +16,7 @@ import RegisterToTenant from './pages/user/RegisterToTenant.jsx';
 
 // Strony polls - z panelem bocznym z listą pytań
 import PollPage from './pages/Poll.jsx';
+import PollSummary from './pages/PollSummary.jsx';
 
 // Dashboard
 import AdminAccount from './pages/admin/Account.jsx';
@@ -28,6 +29,8 @@ import AnswerOptions from './pages/admin/AnswerOptions.jsx';
 import VoteCodes from './pages/admin/VoteCodes.jsx';
 import PollEdit from './pages/admin/PollEdit.jsx'; 
 
+import ProtectedRoute from './components/ProtectedRoute.jsx'; // gdziekolwiek masz ten komponent
+
 const App = () => {
   return (
     <HashRouter>
@@ -35,9 +38,8 @@ const App = () => {
         {/* Publiczne layouty */}
         <Route element={<LayoutHome />}>
           <Route path="/" element={<Home />} />
-        </Route>
-
-        <Route path="/user" element={<LayoutLogin />}>
+          <Route path="/poll/summary" element={<PollSummary />} />
+          <Route path="/user" element={<LayoutLogin />}>
           <Route path="/user/login" element={<Login />} />
           <Route path="/user/register" element={<Register />} />
           <Route path="/user/admin/register_to_tenant" element={<RegisterToTenant />} />
@@ -46,10 +48,18 @@ const App = () => {
         {/* Layout 'głosowanie' */}
         <Route element={<LayoutPoll />}>
           <Route path="/poll" element={<PollPage />} />
+          
         </Route>
 
-        {/* Admin layout */}
-        <Route path="/admin" element={<LayoutAdmin />}>
+        {/* Admin layout zabezpieczony */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <LayoutAdmin />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<AdminHome />} />
           <Route path="/admin/polls" element={<AdminPolls />} />
           <Route path="/admin/polls/edit" element={<PollEdit />} /> 
@@ -66,3 +76,4 @@ const App = () => {
 };
 
 export default App;
+
