@@ -4,10 +4,6 @@ import Question from '../components/poll/Question';
 import axios from 'axios';
 
 function PollPage(props) {
-  useEffect(() => {
-    document.title = 'Poll <name> | SuffraHub';
-  }, []);
-
   const question_number = 5;
   const pages = ['<-', question_number , '->'];
   const currentPage = question_number;
@@ -29,7 +25,7 @@ function PollPage(props) {
 			<div class="p-5 text-center bg-body-tertiary rounded-3">
 
 
-    <Question data={selectedQuestion}></Question>
+    <Question data={selectedQuestion} pollId={pollData.pollId}></Question>
 
 
         
