@@ -6,12 +6,6 @@ function Question(props) {
     const [question, setQuestion] = useState([]);
     const [options, setOptions] = useState([]);
 
-    // axios.get('http://localhost:8003/getQuestion/' + props.selectedQuestion)
-    // .then(res => setQuestion(res.data.questionData));
-
-    // axios.get('http://localhost:8003/getOptions/' + props.data.question_id)
-    // .then(res => setOptions(res.data.options));
-
 
     const handleChange = (label) => {
         setSelectedOption(label);
@@ -43,11 +37,12 @@ function Question(props) {
         }
     }, [props.data.question_id]);
 
+    console.log(props);
 
     return (
         <>
             <div className="progress">
-                <div className="progress-bar progress-bar-striped" role="progressbar" style={{ width: '71%' }} aria-valuenow="5" aria-valuemin="1" aria-valuemax="7">71%</div>
+                <div className="progress-bar progress-bar-striped" role="progressbar" style={{ width: `${(props.data.number / props.data.total) * 100}%` }} aria-valuenow="5" aria-valuemin="1" aria-valuemax="7">{Math.round((props.data.number / props.data.total) * 100)}%</div>
             </div>
             <h1 className="text-body-emphasis text-start mt-3 h1">
                 <div className="d-flex align-items-center">
