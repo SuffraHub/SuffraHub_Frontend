@@ -1,37 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-
 const AdminHeader = () => {
   const [theme, setTheme] = useState('light');
   const [companyName, setCompanyName] = useState('Ładowanie...');
-  const roleDescription = "Administrator"; // Można też pobierać dynamicznie
+  const [roleDescription, setRoleDescription] = useState('Ładowanie...');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-bs-theme', theme);
   }, [theme]);
 
   useEffect(() => {
-    const fetchTenantName = async () => {
+    const fetchUserAndTenantInfo = async () => {
       try {
         const userRes = await axios.get('http://localhost:8000/user-info', { withCredentials: true });
-        const companyId = userRes.data.company_id;
+        const userData = userRes.data;
+
+        // Ustawiamy opis roli
+        if (userData.permissions_desc) {
+          setRoleDescription(userData.permissions_desc);
+        } else {
+          setRoleDescription('Brak opisu roli');
+        }
+
+        const companyId = userData.company_id;
         if (!companyId) {
           setCompanyName('Unassigned');
           return;
         }
 
-        const tenantRes = await axios.get(`http://localhost:8001/tenant-info/${companyId}`, { credentials: 'include' });
-        //if (!tenantRes.ok) throw new Error('Błąd pobierania tenant-info');
-
-        setCompanyName(tenantRes.data.companyInfo.name || 'Unknown');
+        const tenantRes = await axios.get(`http://localhost:8001/tenant-info/${companyId}`, { withCredentials: true });
+        setCompanyName(tenantRes.data.companyInfo?.name || 'Unknown');
       } catch (error) {
         console.error('Error:', error);
         setCompanyName('Unknown error');
+        setRoleDescription('Błąd pobierania roli');
       }
     };
 
-    fetchTenantName();
+    fetchUserAndTenantInfo();
   }, []);
 
   const toggleTheme = () => {
