@@ -17,11 +17,13 @@ const SidebarPoll = ({ data, selectedQuestion, setSelectedQuestion }) => {
 
         // Jeśli nic nie wybrano, ustaw pierwsze pytanie
         if (!selectedQuestion && fetched.length > 0) {
+          fetched[0].number = 1;
           setSelectedQuestion(fetched[0]);
         }
       });
   }, [data.pollId]);
 
+  document.title = 'Poll - ' + pollData.name + '| SuffraHub';
 
 return (
   <>
@@ -37,7 +39,7 @@ return (
         {questions.map((question, index) => (
           <button
             key={index + 1}
-            onClick={() => setSelectedQuestion(question)}
+            onClick={() => setSelectedQuestion({ ...question, number: index + 1 })}
             className={`btn text-white ${question.hasAnswer ? 'bg-success' : 'bg-secondary'}`}
             style={{ width: '40px', height: '40px' }}
             title={`Pytanie ${index + 1}`}
