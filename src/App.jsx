@@ -6,7 +6,6 @@ import LayoutAdmin from './layouts/LayoutAdmin.jsx';
 import LayoutPoll from './layouts/LayoutPoll.jsx';
 import LayoutHome from './layouts/LayoutHome.jsx';
 
-
 // Strona domowa
 import Home from './pages/Home.jsx';
 
@@ -28,6 +27,7 @@ import AdminTenant from './pages/admin/Tenant.jsx';
 import QuestionEdit from './pages/admin/QuestionEdit.jsx';
 import AnswerOptions from './pages/admin/AnswerOptions.jsx';
 import VoteCodes from './pages/admin/VoteCodes.jsx';
+import PollEdit from './pages/admin/PollEdit.jsx'; 
 
 import ProtectedRoute from './components/ProtectedRoute.jsx'; // gdziekolwiek masz ten komponent
 
@@ -39,9 +39,7 @@ const App = () => {
         <Route element={<LayoutHome />}>
           <Route path="/" element={<Home />} />
           <Route path="/poll/summary" element={<PollSummary />} />
-        </Route>
-
-        <Route path="/user" element={<LayoutLogin />}>
+          <Route path="/user" element={<LayoutLogin />}>
           <Route path="/user/login" element={<Login />} />
           <Route path="/user/register" element={<Register />} />
           <Route path="/user/admin/register_to_tenant" element={<RegisterToTenant />} />
@@ -63,13 +61,14 @@ const App = () => {
           }
         >
           <Route index element={<AdminHome />} />
-          <Route path="polls" element={<AdminPolls />} />
-          <Route path="questions" element={<AdminQuestion />} />
-          <Route path="account" element={<AdminAccount />} />
-          <Route path="tenant" element={<AdminTenant />} />
-          <Route path="questions/edit" element={<QuestionEdit />} />
-          <Route path="polls/vote_codes" element={<VoteCodes />} />
-          <Route path="answer_options" element={<AnswerOptions />} />
+          <Route path="/admin/polls" element={<AdminPolls />} />
+          <Route path="/admin/polls/edit" element={<PollEdit />} /> 
+          <Route path="/admin/questions" element={<AdminQuestion />} />
+          <Route path="/admin/account" element={<AdminAccount />} />
+          <Route path="/admin/tenant" element={<AdminTenant />} />
+          <Route path="/admin/questions/edit" element={<QuestionEdit />} />
+          <Route path="/admin/polls/vote_codes" element={<VoteCodes />} />
+          <Route path="/admin/answer_options" element={<AnswerOptions />} />
         </Route>
       </Routes>
     </HashRouter>
