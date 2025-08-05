@@ -21,7 +21,7 @@ export default function AdminTenant() {
         if (userData.company_id === 0) {
           setCompanyInfo({}); // no tenant assigned
         } else {
-          fetch(`http://localhost:8001/tenant-info/${userData.company_id}`)
+          fetch(`http://localhost:8006/tenant-info/${userData.company_id}`)
             .then((res) => res.json())
             .then((data) => {
               setCompanyInfo({
@@ -33,7 +33,7 @@ export default function AdminTenant() {
               setTenantDescription(data.companyInfo.description);
             });
 
-          fetch(`http://localhost:8001/users-by-tenant/${userData.company_id}`)
+          fetch(`http://localhost:8006/users-by-tenant/${userData.company_id}`)
             .then((res) => res.json())
             .then((data) => setTenantUsers(data.users));
         }
@@ -44,7 +44,7 @@ export default function AdminTenant() {
   const handleUpdateSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:8001/edit-tenant", {
+    fetch("http://localhost:8006/edit-tenant", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -68,7 +68,7 @@ export default function AdminTenant() {
     })
       .then((res) => res.json())
       .then((userData) => {
-        fetch("http://localhost:8001/create-tenant", {
+        fetch("http://localhost:8006/create-tenant", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

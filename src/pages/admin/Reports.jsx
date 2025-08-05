@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosWithLogger';
 
 function Reports() {
   const [polls, setPolls] = useState([]);

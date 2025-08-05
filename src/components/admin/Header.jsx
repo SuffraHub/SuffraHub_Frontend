@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../axiosWithLogger';
 
 const AdminHeader = () => {
   const [theme, setTheme] = useState('light');
@@ -29,7 +29,7 @@ const AdminHeader = () => {
           return;
         }
 
-        const tenantRes = await axios.get(`http://localhost:8001/tenant-info/${companyId}`, { withCredentials: true });
+        const tenantRes = await axios.get(`http://localhost:8006/tenant-info/${companyId}`, { withCredentials: true });
         setCompanyName(tenantRes.data.companyInfo?.name || 'Unknown');
       } catch (error) {
         console.error('Error:', error);

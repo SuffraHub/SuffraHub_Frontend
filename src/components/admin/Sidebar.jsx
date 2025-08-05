@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosWithLogger';
 
 const Sidebar = () => {
   const [activePolls, setActivePolls] = useState([]);
@@ -21,7 +21,7 @@ const Sidebar = () => {
         const companyId = userRes.data.company_id;
         //console.log("Company:", companyId);
 
-        const tenantRes = await axios.get(`http://localhost:8001/tenant-info/${companyId}`, { withCredentials: true });
+        const tenantRes = await axios.get(`http://localhost:8006/tenant-info/${companyId}`, { withCredentials: true });
         //console.log(tenantRes.data.companyInfo.name);
         setTenantName(tenantRes.data.companyInfo.name || 'Unknown');
 

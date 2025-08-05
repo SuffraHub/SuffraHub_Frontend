@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../axiosWithLogger';
 
 function ProtectedRoute({ allowedPermissions = [], children }) {
   const [loading, setLoading] = useState(true);

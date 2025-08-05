@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosWithLogger';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
