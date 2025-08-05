@@ -1,39 +1,88 @@
-import { useEffect } from 'react';
-
+import { useEffect, useState } from 'react';
 
 function Admin() {
- // const [count, setCount] = useState(0)
+  const [expiringPolls, setExpiringPolls] = useState([]);
+  const currentUser = "Admin"; // Replace with actual user session info if available
+
   useEffect(() => {
-     document.title = 'Admin | SuffraHub';
-   })
+    document.title = 'Admin | SuffraHub';
+
+    const polls = JSON.parse(localStorage.getItem("polls")) || [];
+
+    const upcoming = polls.filter((poll) => {
+      if (!poll.validTo) return false;
+      const expiryDate = new Date(poll.validTo);
+      const now = new Date();
+      const diffDays = (expiryDate - now) / (1000 * 60 * 60 * 24);
+      return diffDays >= 0 && diffDays <= 7;
+    });
+
+    setExpiringPolls(upcoming);
+  }, []);
+
+  const changelog = [
+    { date: '2025-08-04', change: 'Added poll editing feature' },
+    { date: '2025-08-03', change: 'Fixed question description styling' },
+    { date: '2025-08-02', change: 'Removed extra header above poll form' },
+    { date: '2025-08-01', change: 'Initial admin dashboard setup' },
+  ];
 
   return (
     <>
-    <h1>Welcome to AdminHome!</h1>
-    					<h1 class="text-warning fw-bold">Changes will appear here. See the sidebar.</h1>
+      <h1 className="mb-4">Admin Panel</h1>
 
-      {/* <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      {/* Changelog */}
+      <div className="card p-4 shadow-sm mb-4">
+        <h5 className="mb-3">Recent Changes</h5>
+        <table className="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            {changelog.map((log, idx) => (
+              <tr key={idx}>
+                <td>{log.date}</td>
+                <td>{log.change}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+      {/* Warnings + Logged-in Info */}
+      <div className="card p-4 shadow-sm">
+        <h5 className="mb-3">System Overview</h5>
+        <table className="table table-bordered table-hover">
+          <tbody>
+            <tr>
+              <th>Currently Logged In</th>
+              <td>{currentUser}</td>
+            </tr>
+            <tr>
+              <th>Polls Expiring Soon</th>
+              <td>
+                {expiringPolls.length === 0 ? (
+                  <span className="text-success">No polls expiring in the next 7 days.</span>
+                ) : (
+                  <ul className="mb-0">
+                    {expiringPolls.map((poll) => (
+                      <li key={poll.id}>
+                        <strong>{poll.name}</strong> — expires on{" "}
+                        {new Date(poll.validTo).toLocaleString()}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p> */}
     </>
-  )
+  );
 }
 
-export default Admin
+export default Admin;
