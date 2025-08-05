@@ -14,30 +14,30 @@ function PollSummary() {
     
 
     // Przykładowe dane zgodne z nową strukturą
-    const exampleAnswers = {
-      1: {
-        question_poll_id: 1,
-        question: "Do you agree with $1?",
-        option_id: 10,
-        answer: "Yes"
-      },
-      2: {
-        question_poll_id: 2,
-        question: "Do you agree with $2?",
-        option_id: 20,
-        answer: "Hold"
-      },
-      3: {
-        question_poll_id: 3,
-        question: "Do you agree with $3?",
-        option_id: 30,
-        answer: "No"
-      }
-    };
-    localStorage.setItem('answers', JSON.stringify(exampleAnswers));
-    localStorage.setItem('token', '719829');
-    localStorage.setItem('pollId', '4');
-    localStorage.setItem('pollName', 'Afera MOP Sławoszewo');
+    // const exampleAnswers = {
+    //   1: {
+    //     question_poll_id: 1,
+    //     question: "Do you agree with $1?",
+    //     option_id: 10,
+    //     answer: "Yes"
+    //   },
+    //   2: {
+    //     question_poll_id: 2,
+    //     question: "Do you agree with $2?",
+    //     option_id: 20,
+    //     answer: "Hold"
+    //   },
+    //   3: {
+    //     question_poll_id: 3,
+    //     question: "Do you agree with $3?",
+    //     option_id: 30,
+    //     answer: "No"
+    //   }
+    // };
+    // localStorage.setItem('answers', JSON.stringify(exampleAnswers));
+    // localStorage.setItem('token', '719829');
+    // localStorage.setItem('pollId', '4');
+    // localStorage.setItem('pollName', 'Afera MOP Sławoszewo');
     const storedPollName = localStorage.getItem('pollName');
     if (storedPollName) setPollName(storedPollName);
 

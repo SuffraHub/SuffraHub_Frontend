@@ -48,7 +48,7 @@ const AdminHeader = () => {
   return (
     <header className="navbar sticky-top bg-dark flex-md-nowrap p-1 shadow" data-bs-theme="dark">
       {/* Left: Tenant info */}
-      <a className="navbar-brand col-md-4 col-lg-2 me-0 px-3 fs-6 text-white text-wrap" href="/admin">
+      <a className="navbar-brand col-md-4 col-lg-2 me-0 px-3 fs-6 text-white text-wrap" href="/">
         Tenant:<br /> <b>{companyName}</b>
       </a>
 

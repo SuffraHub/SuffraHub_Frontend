@@ -29,6 +29,7 @@ import AnswerOptions from './pages/admin/AnswerOptions.jsx';
 import VoteCodes from './pages/admin/VoteCodes.jsx';
 import AdminReports from './pages/admin/Reports.jsx';
 import PollEdit from './pages/admin/PollEdit.jsx';
+import PollReport from './pages/admin/PollReport.jsx';
 
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
@@ -82,6 +83,14 @@ const App = () => {
             element={
               <ProtectedRoute allowedPermissions={[1, 2, 3, 4, 5, 6]}>
                 <AdminReports />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="reports/poll/:poll_id"
+            element={
+              <ProtectedRoute allowedPermissions={[1, 2, 3, 4, 5, 6]}>
+                <PollReport />
               </ProtectedRoute>
             }
           />

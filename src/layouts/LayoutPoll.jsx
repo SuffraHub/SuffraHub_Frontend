@@ -22,7 +22,7 @@ const LayoutPoll = () => {
             setSelectedQuestion={setSelectedQuestion}
           />
           <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 d-flex">
-            <Outlet context={{ pollData, selectedQuestion }} />
+            <Outlet context={{ pollData, selectedQuestion, setSelectedQuestion }} />
           </main>
         </div>
       </div>
