@@ -12,6 +12,7 @@ import {
 } from "@dnd-kit/core";
 import { v4 as uuidv4 } from "uuid";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios";
 
 const DraggableAnswer = ({ id, label, onDelete, isCustom }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useDraggable({ id });
@@ -79,47 +80,90 @@ const Questions = () => {
   const [question, setQuestion] = useState(data?.question || "");
   const [description, setDescription] = useState(data?.description || "");
   const [hidden, setHidden] = useState(data?.hidden || false);
-  const [expireDate, setExpireDate] = useState(data?.expireDate || "");
   const [positiveAnswers, setPositiveAnswers] = useState([]);
   const [negativeAnswers, setNegativeAnswers] = useState([]);
   const [neutralAnswers, setNeutralAnswers] = useState([]);
   const [customAnswers, setCustomAnswers] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
+  const [newType, setNewType] = useState('custom');
   const [newCustom, setNewCustom] = useState("");
-  const [allVotes, setAllVotes] = useState([]);
+  const [allQuestions, setallQuestions] = useState([]);
 
   const sensors = useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor));
 
-  useEffect(() => {
-    const initialAnswers = [
-      { label: "Yes", type: "positive" },
-      { label: "Agree", type: "positive" },
-      { label: "Accept", type: "positive" },
-      { label: "No", type: "negative" },
-      { label: "Disagree", type: "negative" },
-      { label: "Reject", type: "negative" },
-      { label: "Maybe", type: "neutral" },
-      { label: "Not Sure", type: "neutral" },
-    ].map((item) => ({ id: uuidv4(), ...item }));
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      // 1. Pobierz dane użytkownika z sesji
+      const userRes = await axios.get("http://localhost:8000/user-info", { withCredentials: true });
+      const companyId = userRes.data.company_id;
 
-    setPositiveAnswers(initialAnswers.filter((a) => a.type === "positive"));
-    setNegativeAnswers(initialAnswers.filter((a) => a.type === "negative"));
-    setNeutralAnswers(initialAnswers.filter((a) => a.type === "neutral"));
+      // 3. Pobierz opcje odpowiedzi
+      const optionsRes = await axios.get(`http://localhost:8003/getOptions/${companyId}`);
+      const rawOptions = optionsRes.data.options || [];
 
-    const votes = JSON.parse(localStorage.getItem("votes")) || [];
-    setAllVotes(votes);
+      // 4. Przekształć dane z backendu do formatu komponentu
+      const parsedOptions = rawOptions.map((opt) => ({
+        id: opt.option_id || uuidv4(), // zakładam, że option_id to unikalne ID z bazy
+        label: opt.label,
+        type: opt.type || "neutral" // fallback na neutral, jeśli nie ma
+      }));
 
-    if (isEditing) {
-      const allAnswers = [...initialAnswers];
-      const selected = (data.answerType || []).map((label) => {
-        let found = allAnswers.find((a) => a.label === label);
-        if (!found) found = { id: uuidv4(), label, type: "custom" };
-        return found;
-      });
-      setSelectedAnswers(selected);
-      setCustomAnswers(selected.filter((a) => a.type === "custom"));
+      setPositiveAnswers(parsedOptions.filter((a) => a.type === "positive"));
+      setNegativeAnswers(parsedOptions.filter((a) => a.type === "negative"));
+      setNeutralAnswers(parsedOptions.filter((a) => a.type === "neutral"));
+
+      // 5. Przy edycji pytania – odtwórz odpowiedzi
+      if (isEditing) {
+        const selected = (data.answerType || []).map((label) => {
+          let found = parsedOptions.find((a) => a.label === label);
+          if (!found) found = { id: uuidv4(), label, type: "custom" };
+          return found;
+        });
+        setSelectedAnswers(selected);
+        setCustomAnswers(selected.filter((a) => a.type === "custom"));
+      }
+    } catch (err) {
+      console.error("Błąd podczas pobierania danych:", err);
+      setAllVotes([]);
     }
-  }, [data, isEditing]);
+  };
+
+  fetchData();
+  
+
+  const fetchQuestions = async () => {
+    try {
+      // Pobierz dane sesji użytkownika
+      const userRes = await axios.get("http://localhost:8000/user-info", { withCredentials: true });
+      const companyId = userRes.data.company_id;
+      //console.log(userRes.data.company_id);
+
+      // Pobierz pytania dla firmy
+      const response = await axios.get(`http://localhost:8003/getTenantQuestions/${companyId}`);
+      setallQuestions(response.data.questions || []);
+      console.log(response.data.questions);
+    } catch (error) {
+      console.error("Error fetching tenant questions:", error);
+      setallQuestions([]); // fallback
+    }
+  };
+
+  fetchQuestions();
+  
+
+  if (isEditing) {
+    const allAnswers = [...initialAnswers];
+    const selected = (data.answerType || []).map((label) => {
+      let found = allAnswers.find((a) => a.label === label);
+      if (!found) found = { id: uuidv4(), label, type: "custom" };
+      return found;
+    });
+    setSelectedAnswers(selected);
+    setCustomAnswers(selected.filter((a) => a.type === "custom"));
+  }
+}, [data, isEditing]);
+
 
   const removeFromAll = (id) => {
     setPositiveAnswers((prev) => prev.filter((a) => a.id !== id));
@@ -161,80 +205,121 @@ const Questions = () => {
     }
   };
 
-  const handleAddCustom = () => {
-    if (!newCustom.trim()) return;
-    const allLabels = [
-      ...positiveAnswers,
-      ...negativeAnswers,
-      ...neutralAnswers,
-      ...customAnswers,
-      ...selectedAnswers,
-    ].map((a) => a.label.toLowerCase());
 
-    if (allLabels.includes(newCustom.trim().toLowerCase())) {
-      alert("This answer already exists.");
-      return;
-    }
+  const fetchOptions = async () => {
+      const userRes = await axios.get("http://localhost:8000/user-info", { withCredentials: true });
+      const companyId = userRes.data.company_id;
 
-    const newEntry = { id: uuidv4(), label: newCustom.trim(), type: "custom" };
-    setCustomAnswers((prev) => [...prev, newEntry].sort((a, b) => a.label.localeCompare(b.label)));
-    setNewCustom("");
-  };
+  try {
+    const res = await axios.get(`http://localhost:8003/getOptions/${companyId}`);
+    const options = res.data.options;
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (!question.trim()) {
-      alert("Question cannot be empty.");
-      return;
-    }
-    if (selectedAnswers.length === 0) {
-      alert("Select at least one answer.");
-      return;
-    }
+    setPositiveAnswers(options.filter((o) => o.type === "positive"));
+    setNegativeAnswers(options.filter((o) => o.type === "negative"));
+    setNeutralAnswers(options.filter((o) => o.type === "neutral"));
+    setCustomAnswers(options.filter((o) => o.type === "custom"));
+  } catch (err) {
+    console.error("Failed to fetch options:", err);
+  }
+};
 
-    const votes = JSON.parse(localStorage.getItem("votes")) || [];
 
-    if (isEditing) {
-      const updatedVotes = votes.map((vote) =>
-        vote.id === data.id
-          ? {
-              ...vote,
-              question,
-              description,
-              hidden,
-              expireDate,
-              answerType: selectedAnswers.map((a) => a.label),
-              createdAt: data.createdAt,
-              createdBy: data.createdBy,
-            }
-          : vote
-      );
-      localStorage.setItem("votes", JSON.stringify(updatedVotes));
-      setAllVotes(updatedVotes);
-    } else {
-      const newQuestion = {
-        id: uuidv4(),
-        question,
-        description,
-        hidden,
-        expireDate,
-        answerType: selectedAnswers.map((a) => a.label),
-        createdAt: new Date().toISOString(),
-        createdBy: "Admin",
-      };
-      const newVotes = [...votes, newQuestion];
-      localStorage.setItem("votes", JSON.stringify(newVotes));
-      setAllVotes(newVotes);
-      setQuestion("");
-      setDescription("");
-      setHidden(false);
-      setExpireDate("");
-      setSelectedAnswers([]);
-      setCustomAnswers([]);
-    }
+const allowedTypes = ['positive', 'negative', 'neutral', 'custom'];
+
+const handleAddCustom = async () => {
+        const userRes = await axios.get("http://localhost:8000/user-info", { withCredentials: true });
+      const companyId = userRes.data.company_id;
+  if (!newCustom.trim()) return;
+
+  if (!companyId) {
+    alert('Missing company ID');
+    return;
+  }
+
+  if (!allowedTypes.includes(newType)) {
+    alert('Invalid type selected.');
+    return;
+  }
+
+  const allLabels = [
+    ...positiveAnswers,
+    ...negativeAnswers,
+    ...neutralAnswers,
+    ...customAnswers,
+    ...selectedAnswers,
+  ].map((a) => a.label.toLowerCase());
+
+  const trimmed = newCustom.trim();
+
+  if (allLabels.includes(trimmed.toLowerCase())) {
+    alert('This answer already exists.');
+    return;
+  }
+
+  try {
+    await axios.post('http://localhost:8003/addOption', {
+      label: trimmed,
+      company_id: companyId,
+      type: newType,
+    });
+
+    setNewCustom('');
+    fetchOptions();
+  } catch (err) {
+    console.error('Failed to add option', err);
+    alert('Error adding option.');
+  }
+};
+
+
+const handleDeleteCustom = async (id) => {
+  try {
+    await axios.delete(`http://localhost:8003/deleteOption/${id}`);
+    fetchOptions(); // odśwież listę z backendu
+    removeFromAll(id); // usuń z wybranych (jeśli tam było)
+  } catch (err) {
+    console.error('Failed to delete option', err);
+    alert('Error deleting option.');
+  }
+};
+
+
+const handleSave = async (e) => {
+  e.preventDefault();
+
+  if (!question.trim()) return alert("Question cannot be empty.");
+  if (selectedAnswers.length === 0) return alert("Select at least one answer.");
+
+  try {
+    const userRes = await axios.get("http://localhost:8000/user-info", { withCredentials: true });
+    const companyId = userRes.data.company_id;
+    const userId = userRes.data.user_id;
+
+    const payload = {
+      question,
+      description: description ?? "",
+      hidden: hidden ?? 0,
+      user_id: userId,
+      company_id: companyId
+    };
+
+    const res = await axios.post("http://localhost:8003/createQuestion", payload);
+    const questionId = res.data.questionId;
+
+    const labels = selectedAnswers.map(a => a.label);
+
+    await axios.post("http://localhost:8003/addOptionsToQuestion", {
+      questionId,
+      labels,
+      tenantId: companyId
+    });
 
     navigate("/admin/questions");
-  };
+  } catch (err) {
+    console.error("Failed to save question:", err);
+    alert("Error while saving question.");
+  }
+};
 
   const handleEditClick = (vote) => {
     navigate("/admin/questions/edit", { state: vote });
@@ -279,16 +364,6 @@ const Questions = () => {
             </label>
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Expire Date</label>
-            <input
-              type="date"
-              className="form-control"
-              value={expireDate}
-              onChange={(e) => setExpireDate(e.target.value)}
-            />
-          </div>
-
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <div className="row g-4">
               <DroppableColumn id="positive" title="Positive" icon="bi-hand-thumbs-up">
@@ -310,34 +385,53 @@ const Questions = () => {
               </DroppableColumn>
 
               <DroppableColumn id="custom" title="Custom" icon="bi-pencil-square">
-                {customAnswers.sort((a, b) => a.label.localeCompare(b.label)).map((a) => (
-                  <DraggableAnswer
-                    key={a.id}
-                    id={a.id}
-                    label={a.label}
-                    isCustom
-                    onDelete={removeFromAll}
-                  />
-                ))}
-                <div className="input-group mt-2">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Add custom answer"
-                    value={newCustom}
-                    onChange={(e) => setNewCustom(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleAddCustom();
-                      }
-                    }}
-                  />
-                  <button type="button" className="btn btn-outline-primary" onClick={handleAddCustom}>
-                    Add
-                  </button>
-                </div>
-              </DroppableColumn>
+  {customAnswers
+    .sort((a, b) => a.label.localeCompare(b.label))
+    .map((a) => (
+      <DraggableAnswer
+        key={a.id}
+        id={a.id}
+        label={a.label}
+        isCustom
+        onDelete={() => handleDeleteCustom(a.id)}
+      />
+    ))}
+
+  <select
+    className="form-select mt-2"
+    value={newType}
+    onChange={(e) => setNewType(e.target.value)}
+  >
+    <option value="custom">Custom</option>
+    <option value="positive">Positive</option>
+    <option value="negative">Negative</option>
+    <option value="neutral">Neutral</option>
+  </select>
+
+  <div className="input-group mt-2">
+    <input
+      type="text"
+      className="form-control"
+      placeholder="Add answer"
+      value={newCustom}
+      onChange={(e) => setNewCustom(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAddCustom();
+        }
+      }}
+    />
+    <button
+      type="button"
+      className="btn btn-outline-primary"
+      onClick={handleAddCustom}
+    >
+      Add
+    </button>
+  </div>
+</DroppableColumn>
+
 
               <DroppableColumn id="selected" title="Selected Answers" icon="bi-check-circle" doubleHeight extraWide>
                 {selectedAnswers.sort((a, b) => a.label.localeCompare(b.label)).map((a) => (
@@ -372,7 +466,6 @@ const Questions = () => {
               <th>Question</th>
               <th>Description</th>
               <th>Hidden</th>
-              <th>Expire Date</th>
               <th>Answers</th>
               <th>Created At</th>
               <th>Created By</th>
@@ -380,27 +473,27 @@ const Questions = () => {
             </tr>
           </thead>
           <tbody>
-            {allVotes.length === 0 && (
-              <tr>
-                <td colSpan="9" className="text-center">
-                  No questions added yet.
-                </td>
-              </tr>
-            )}
-            {allVotes.map((vote) => (
-              <tr key={vote.id}>
-                <td>{vote.id}</td>
+{allQuestions.length === 0 && (
+  <tr key="no-questions">
+    <td colSpan="9" className="text-center">
+      No questions added yet.
+    </td>
+  </tr>
+)}
+
+            {allQuestions.map((vote) => (
+              <tr key={vote.question_id}>
+                <td>{vote.question_id}</td>
                 <td>{vote.question}</td>
                 <td>{vote.description}</td>
                 <td>{vote.hidden ? "Yes" : "No"}</td>
-                <td>{vote.expireDate}</td>
                 <td>
                   {Array.isArray(vote.answerType)
                     ? vote.answerType.join(", ")
                     : String(vote.answerType) || "-"}
                 </td>
-                <td>{vote.createdAt ? new Date(vote.createdAt).toLocaleString() : "-"}</td>
-                <td>{vote.createdBy || "-"}</td>
+                <td>{vote.created_at ? new Date(vote.created_at).toLocaleString() : "-"}</td>
+                <td>{vote.user_it || "-"}</td>
                 <td>
                   <button
                     className="btn btn-sm btn-primary"
