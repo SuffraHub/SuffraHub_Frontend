@@ -37,7 +37,7 @@ function Question(props) {
         }
     }, [props.data.question_id]);
 
-    console.log(props);
+    console.log("Props:", props);
 
     return (
         <>

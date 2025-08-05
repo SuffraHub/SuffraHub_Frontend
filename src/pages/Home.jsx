@@ -54,6 +54,7 @@ function Home() {
 
         if (pollId) {
           setPollId(pollId); // save poll ID if needed later
+          localStorage.setItem("token", voteToken);
           setStatusMessage('✅ Token accepted. Redirecting...');
           setTimeout(() => {
             navigate('/poll', {

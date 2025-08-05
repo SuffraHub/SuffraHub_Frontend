@@ -7,6 +7,11 @@ const SidebarPoll = ({ data, selectedQuestion, setSelectedQuestion }) => {
   const [questions, setQuestions] = useState([]);
   const [numberOfQuestions, setNumberOfQuestions] = useState(null);
 
+
+  localStorage.setItem("pollName", pollData.name);
+  localStorage.setItem("pollId", pollData.id);
+console.log("hpoldata", pollData);
+
   useEffect(() => {
     axios.get('http://localhost:8005/poll-by-id/' + data.pollId)
       .then(response => setPollData(response.data.pollData));
