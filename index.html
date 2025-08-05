@@ -5,6 +5,34 @@
     <link rel="icon" type="image/svg+xml" href="/img/icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SuffraHub</title>
+    <style>
+      @media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .printable-area,
+  .printable-area * {
+    visibility: visible;
+  }
+
+  .printable-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+  }
+
+  button,
+  .btn,
+  input,
+  form {
+    display: none !important;
+  }
+}
+
+    </style>
   </head>
   <body>
     <div id="root"></div>

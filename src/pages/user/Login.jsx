@@ -20,26 +20,49 @@ function Login() {
     }));
   }
 
-  function loginClick() {
+  async function loginClick() {
     if (formData.username.trim().length === 0) {
       setMessage("Username is required.");
-    } else if (formData.password.trim().length === 0) {
+      return;
+    }
+    if (formData.password.trim().length === 0) {
       setMessage("Password is required.");
-    } else {
-      axios.post('http://localhost:8000/login', {
+      return;
+    }
+
+    try {
+      const res = await axios.post('http://localhost:8000/login', {
         username: formData.username,
-        password: formData.password
-      })
-        .then((res) => {
-          if (res.data.success) {
-            navigate('/admin');
-          } else {
-            setMessage(res.data.message || "Login failed.");
-          }
-        })
-        .catch((err) => {
-          setMessage(err.response?.data?.message || "An error occurred while logging in.");
-        });
+        password: formData.password,
+        remember: formData.remember_me
+      }, {
+        withCredentials: true // dla sesji
+      });
+
+      setMessage('');
+      
+      if (res.data.token) {
+        // Zapisz token tylko jeśli go otrzymaliśmy (remember me)
+        localStorage.setItem('token', res.data.token);
+      } else {
+        localStorage.removeItem('token');
+      }
+
+      // Po udanym logowaniu pobierz dane usera z backendu
+      const token = localStorage.getItem('token');
+
+      const userInfoRes = await axios.get('http://localhost:8000/user-info', {
+        withCredentials: true,
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+
+      console.log('User info:', userInfoRes.data);
+      // Możesz też tu ustawić globalny stan lub kontekst z danymi usera
+
+      navigate('/admin');
+
+    } catch (err) {
+      setMessage(err.response?.data?.message || "An error occurred while logging in.");
     }
   }
 

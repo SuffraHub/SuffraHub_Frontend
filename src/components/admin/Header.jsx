@@ -1,14 +1,45 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const AdminHeader = () => {
-  const roleDescription = "Administrator"; // Placeholder
-  const companyName = "Firm XYZ";         // Placeholder
-
   const [theme, setTheme] = useState('light');
+  const [companyName, setCompanyName] = useState('Ładowanie...');
+  const [roleDescription, setRoleDescription] = useState('Ładowanie...');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-bs-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    const fetchUserAndTenantInfo = async () => {
+      try {
+        const userRes = await axios.get('http://localhost:8000/user-info', { withCredentials: true });
+        const userData = userRes.data;
+
+        // Ustawiamy opis roli
+        if (userData.permissions_desc) {
+          setRoleDescription(userData.permissions_desc);
+        } else {
+          setRoleDescription('Brak opisu roli');
+        }
+
+        const companyId = userData.company_id;
+        if (!companyId) {
+          setCompanyName('Unassigned');
+          return;
+        }
+
+        const tenantRes = await axios.get(`http://localhost:8001/tenant-info/${companyId}`, { withCredentials: true });
+        setCompanyName(tenantRes.data.companyInfo?.name || 'Unknown');
+      } catch (error) {
+        console.error('Error:', error);
+        setCompanyName('Unknown error');
+        setRoleDescription('Błąd pobierania roli');
+      }
+    };
+
+    fetchUserAndTenantInfo();
+  }, []);
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
@@ -17,7 +48,7 @@ const AdminHeader = () => {
   return (
     <header className="navbar sticky-top bg-dark flex-md-nowrap p-1 shadow" data-bs-theme="dark">
       {/* Left: Tenant info */}
-      <a className="navbar-brand col-md-4 col-lg-2 me-0 px-3 fs-6 text-white text-wrap" href="/admin.php">
+      <a className="navbar-brand col-md-4 col-lg-2 me-0 px-3 fs-6 text-white text-wrap" href="/admin">
         Tenant:<br /> <b>{companyName}</b>
       </a>
 
@@ -37,7 +68,7 @@ const AdminHeader = () => {
         </button>
 
         {/* Role button */}
-        <a className="btn btn-outline-light text-nowrap" href="/admin_account.php">
+        <a className="btn btn-outline-light text-nowrap" href="/admin/account">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             className="bi bi-person-fill" viewBox="0 0 16 16">
             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />

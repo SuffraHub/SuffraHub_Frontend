@@ -48,7 +48,7 @@ function Home() {
     const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
 
     console.log(voteToken);
-    await axios.get('http://localhost:8001/poll-by-code/' + voteToken)
+    await axios.get('http://localhost:8005/poll-by-code/' + voteToken)
       .then(response => {
         const pollId = response.data.poll_id;
 
@@ -80,7 +80,7 @@ function Home() {
       <main className="container my-5 py-5 text-center">
           <div className="row align-items-center">
           <div className="col">
-            <h1 className="text-body-emphasis"><b>Public</b> polls</h1>
+            <h1 className="text-body-emphasis"><b>Public</b> polls <br /><span className="badge text-bg-danger fs-6">In future</span></h1>
             <div className="list-group mt-4 text-start">
               {publicVotes.map((vote) => (
                 <a key={vote.id} href="#" className="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">

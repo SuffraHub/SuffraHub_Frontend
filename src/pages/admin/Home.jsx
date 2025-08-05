@@ -29,6 +29,7 @@ function Admin() {
 
   return (
     <>
+
       <h1 className="mb-4">Admin Panel</h1>
 
       {/* Changelog */}
