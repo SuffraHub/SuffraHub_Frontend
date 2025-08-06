@@ -58,6 +58,7 @@ function PollReport() {
 
         const reportRes = await axios.get(`http://localhost:8005/poll-report/${poll_id}/${company_id}`);
         setReport(reportRes.data);
+        console.log("Report", reportRes.data);
       } catch (err) {
         console.error(err);
         setError('Failed to load report.');
@@ -102,7 +103,7 @@ function PollReport() {
         <h4>{report.poll.name}</h4>
         <p className="text-muted">{report.poll.description}</p>
         <p><strong>Valid until:</strong> {new Date(report.poll.valid_to).toLocaleDateString()}</p>
-        <p><strong>Status:</strong> <span className="text-success">Closed</span></p>
+        {/* <p><strong>Status:</strong> <span className="text-success">Closed</span></p> */}
         <p><strong>Voting Type:</strong> Anonymous</p>
       </div>
 
