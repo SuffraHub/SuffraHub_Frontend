@@ -1,15 +1,30 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
 
-
 function Admin() {
   const [expiringPolls, setExpiringPolls] = useState([]);
   const [recentLogs, setRecentLogs] = useState([]);
-  const currentUser = "Admin"; // Replace with actual user session info if available
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     document.title = 'Admin | SuffraHub';
 
+    // Fetch user info
+    async function fetchUser() {
+      try {
+        const userRes = await axios.get('http://localhost:8000/user-info', {
+          withCredentials: true
+        });
+        const userData = userRes.data;
+        setUserInfo(userData); // zapisz dane do stanu
+      } catch (error) {
+        console.error('Błąd podczas pobierania danych użytkownika:', error);
+      }
+    }
+
+    fetchUser();
+
+    // Fetch expiring polls
     const polls = JSON.parse(localStorage.getItem("polls")) || [];
 
     const upcoming = polls.filter((poll) => {
@@ -22,6 +37,7 @@ function Admin() {
 
     setExpiringPolls(upcoming);
 
+    // Fetch recent logs
     axios.post('http://localhost:8006/api/logs/recent')
       .then(res => {
         setRecentLogs(res.data);
@@ -31,6 +47,15 @@ function Admin() {
       });
 
   }, []);
+
+const currentUser = userInfo ? (
+  <>
+    {userInfo.name} {userInfo.surname} ({userInfo.username}) as <b>{userInfo.permissions_desc}</b>
+  </>
+) : (
+  'Nieznany użytkownik'
+);
+
 
   const changelog = [
     { date: '2025-08-04', change: 'Added poll editing feature' },

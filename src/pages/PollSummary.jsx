@@ -59,6 +59,7 @@ const handleSubmit = async () => {
     question_poll_id,
     option_id
   }));
+  console.log("Your votes:", votes);
 
   const res = await fetch('http://localhost:8002/submit-votes', {
     method: 'POST',
