@@ -80,7 +80,7 @@ function PollPage() {
             disabled={!prev}
             onClick={() => prev && goToQuestion(prev)}
           >
-            &larr; Poprzednie
+            &larr; Back
           </button>
 
           {/* Numer pytania */}
@@ -92,14 +92,14 @@ function PollPage() {
               className="btn btn-success"
               onClick={() => navigate('/poll/summary')}
             >
-              Zakończ
+              Submit
             </button>
           ) : (
             <button
               className="btn btn-outline-primary"
               onClick={() => goToQuestion(next)}
             >
-              Następne &rarr;
+              Next &rarr;
             </button>
           )}
         </div>
