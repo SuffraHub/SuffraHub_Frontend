@@ -493,7 +493,7 @@ const handleSave = async (e) => {
                     : String(vote.answerType) || "-"}
                 </td>
                 <td>{vote.created_at ? new Date(vote.created_at).toLocaleString() : "-"}</td>
-                <td>{vote.user_it || "-"}</td>
+                <td>{vote.username || "-"}</td>
                 <td>
                   <button
                     className="btn btn-sm btn-primary"
