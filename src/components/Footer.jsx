@@ -34,7 +34,7 @@ const Footer = ({ toastMessages = [] }) => {
               >
                 <i className="bi bi-check2-square" style={{ fontSize: '2rem', color: 'blue' }}></i>
               </a>
-              <p className="fw-bold mb-0">SuffraHub v.0.1</p>
+              <p className="mb-0"><strong>SuffraHub</strong> v.<strong>1</strong>.0</p>
               <p>(<Link to="https://github.com/SuffraHub/SuffraHub_Frontend/releases">changelog</Link>)</p>
             </div>
 
