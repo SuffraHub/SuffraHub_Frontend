@@ -7,7 +7,7 @@ function PollPage() {
   const navigate = useNavigate();
 
   if (!selectedQuestion) {
-    return <p>Wybierz pytanie z panelu bocznego.</p>;
+    return <p>Choose question from sidebar.</p>;
   }
 
   const current = selectedQuestion.number;
@@ -84,7 +84,7 @@ function PollPage() {
           </button>
 
           {/* Numer pytania */}
-          <span className="fs-5">Pytanie {current} z {total}</span>
+          <span className="fs-5">Question {current} of {total}</span>
 
           {/* Następne lub Zakończ */}
           {!next ? (
