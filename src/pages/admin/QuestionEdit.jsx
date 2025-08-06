@@ -86,22 +86,47 @@ const QuestionEdit = () => {
     useSensor(KeyboardSensor)
   );
 
-  useEffect(() => {
-    const initialAnswers = [
-      { label: "Yes", type: "positive" },
-      { label: "Agree", type: "positive" },
-      { label: "Accept", type: "positive" },
-      { label: "No", type: "negative" },
-      { label: "Disagree", type: "negative" },
-      { label: "Reject", type: "negative" },
-      { label: "Maybe", type: "neutral" },
-      { label: "Not Sure", type: "neutral" },
-    ].map((item) => ({ id: uuidv4(), ...item }));
+useEffect(() => {
+  const fetchOptionsAndSelected = async () => {
+    try {
+      // 1. Pobierz dane użytkownika (dla company_id)
+      const userRes = await axios.get("http://localhost:8000/user-info", { withCredentials: true });
+      const companyId = userRes.data.company_id;
 
-    setPositiveAnswers(initialAnswers.filter((a) => a.type === "positive"));
-    setNegativeAnswers(initialAnswers.filter((a) => a.type === "negative"));
-    setNeutralAnswers(initialAnswers.filter((a) => a.type === "neutral"));
-  }, []);
+      // 2. Pobierz wszystkie dostępne opcje dla firmy
+      const optionsRes = await axios.get(`http://localhost:8003/getOptions/${companyId}`);
+      const rawOptions = optionsRes.data.options || [];
+
+      const parsedOptions = rawOptions.map((opt) => ({
+        id: opt.option_id || uuidv4(),
+        label: opt.label,
+        type: opt.type || "neutral"
+      }));
+
+      setPositiveAnswers(parsedOptions.filter((a) => a.type === "positive"));
+      setNegativeAnswers(parsedOptions.filter((a) => a.type === "negative"));
+      setNeutralAnswers(parsedOptions.filter((a) => a.type === "neutral"));
+      setCustomAnswers(parsedOptions.filter((a) => a.type === "custom"));
+
+      // 3. Pobierz przypisane do pytania odpowiedzi (jeśli edytujesz)
+      const selectedRes = await axios.get(`http://localhost:8003/getQuestionOptions/${data.question_id}`);
+      const labels = selectedRes.data.options || [];
+
+      const selected = labels.map((label) => {
+        let found = parsedOptions.find((a) => a.label === label);
+        if (!found) found = { id: uuidv4(), label, type: "custom" };
+        return found;
+      });
+
+      setSelectedAnswers(selected);
+    } catch (err) {
+      console.error("Error loading options and selected answers:", err);
+    }
+  };
+
+  fetchOptionsAndSelected();
+}, [data.question_id]);
+
 
   const removeFromAll = (id) => {
     setPositiveAnswers((prev) => prev.filter((a) => a.id !== id));
@@ -142,14 +167,40 @@ const QuestionEdit = () => {
     }
   };
 
-  const handleAddCustom = () => {
-    if (newCustom.trim() === "") return;
-    const newEntry = { id: uuidv4(), label: newCustom, type: "custom" };
-    setCustomAnswers((prev) =>
-      [...prev, newEntry].sort((a, b) => a.label.localeCompare(b.label))
-    );
-    setNewCustom("");
-  };
+const handleAddCustom = async () => {
+  if (!newCustom.trim()) return;
+
+  try {
+    const userRes = await axios.get("http://localhost:8000/user-info", { withCredentials: true });
+    const companyId = userRes.data.company_id;
+
+    await axios.post('http://localhost:8003/addOption', {
+      label: newCustom.trim(),
+      company_id: companyId,
+      type: 'custom'
+    });
+
+    setNewCustom('');
+    
+    // Reload options
+    const optionsRes = await axios.get(`http://localhost:8003/getOptions/${companyId}`);
+    const rawOptions = optionsRes.data.options || [];
+
+    const parsedOptions = rawOptions.map((opt) => ({
+      id: opt.option_id || uuidv4(),
+      label: opt.label,
+      type: opt.type || "neutral"
+    }));
+
+    setPositiveAnswers(parsedOptions.filter((a) => a.type === "positive"));
+    setNegativeAnswers(parsedOptions.filter((a) => a.type === "negative"));
+    setNeutralAnswers(parsedOptions.filter((a) => a.type === "neutral"));
+    setCustomAnswers(parsedOptions.filter((a) => a.type === "custom"));
+  } catch (err) {
+    console.error("Failed to add custom option:", err);
+  }
+};
+
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -157,7 +208,7 @@ const QuestionEdit = () => {
 
     const labels = selectedAnswers.map(a => a.label);
 
-  axios.post('http://localhost:8003/addOptionsToQuestion', {
+  await axios.post('http://localhost:8003/addOptionsToQuestion', {
     questionId: data.question_id,
     labels: labels,
     tenantId: data.company_id
