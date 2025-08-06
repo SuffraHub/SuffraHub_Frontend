@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
+import axios from "axios";
+
 
 function Admin() {
   const [expiringPolls, setExpiringPolls] = useState([]);
+  const [recentLogs, setRecentLogs] = useState([]);
   const currentUser = "Admin"; // Replace with actual user session info if available
 
   useEffect(() => {
@@ -18,6 +21,15 @@ function Admin() {
     });
 
     setExpiringPolls(upcoming);
+
+    axios.post('http://localhost:8006/api/logs/recent')
+      .then(res => {
+        setRecentLogs(res.data);
+      })
+      .catch(err => {
+        console.error("Error fetching recent logs:", err);
+      });
+
   }, []);
 
   const changelog = [
@@ -43,8 +55,8 @@ function Admin() {
             </tr>
           </thead>
           <tbody>
-            {changelog.map((log, idx) => (
-              <tr key={idx}>
+            {recentLogs.map(log => (
+              <tr key={log.id}>
                 <td>{log.date}</td>
                 <td>{log.change}</td>
               </tr>
