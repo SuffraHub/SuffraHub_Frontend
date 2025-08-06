@@ -360,7 +360,7 @@ function GenerateTokens({ pollId: initialPollId }) {
         <div className="container p-3 w-100">
           <div className="d-flex justify-content-between align-items-center mb-2">
             <button className="btn btn-outline-secondary" onClick={() => window.print()}>
-              Drukuj PDF
+              Export PDF
             </button>
           </div>
 
